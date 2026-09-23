@@ -35,6 +35,22 @@ Every pull request gets a preview URL automatically. Open Graph image URLs use
 
 Optional environment variable: `SITE_LOCALE` (defaults to `en`), the locale folder to render.
 
+### Deploy to Cloudflare (Workers)
+
+Cloudflare Pages is being replaced by Workers for Next.js, so this repo uses the
+[OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare) (config: `wrangler.jsonc`,
+`open-next.config.ts`).
+
+```bash
+npx wrangler login          # once
+npm run cf:preview          # build + run locally in the Workers runtime
+npm run cf:deploy           # build + deploy; prints https://<name>.<account>.workers.dev
+```
+
+Image optimization uses the Cloudflare Images binding (`IMAGES` in `wrangler.jsonc`). To deploy from Git
+instead, connect the repo in the Cloudflare dashboard (Workers & Pages → Create → Import a repository) with build
+command `npx opennextjs-cloudflare build` and deploy command `npx opennextjs-cloudflare deploy`.
+
 ## Project structure
 
 ```
@@ -54,13 +70,13 @@ tailwind.config.ts   design tokens (colors, type scale, spacing, radii, shadows,
 Tokens mirror the Webflow site's variables and live in `tailwind.config.ts` (with responsive values in
 `app/globals.css`):
 
-| Token | Example |
-| --- | --- |
-| Colors | `bg-brand-purple`, `text-brand-green`, `bg-canvas`, `bg-paper`, `bg-lift` |
-| Type scale | `text-h1` … `text-h6`, `text-body-lg`, `text-body`, `text-body-sm`, `text-label` |
-| Fonts | `font-heading` (PP Woodland), `font-body` (Manrope) |
-| Section spacing | `pt-section-md`, `pb-section-lg`, `px-page` |
-| Breakpoints | mobile `<768`, `md` ≥768 (tablet), `lg` ≥992 (desktop): same as Webflow |
+| Token           | Example                                                                          |
+| --------------- | -------------------------------------------------------------------------------- |
+| Colors          | `bg-brand-purple`, `text-brand-green`, `bg-canvas`, `bg-paper`, `bg-lift`        |
+| Type scale      | `text-h1` … `text-h6`, `text-body-lg`, `text-body`, `text-body-sm`, `text-label` |
+| Fonts           | `font-heading` (PP Woodland), `font-body` (Manrope)                              |
+| Section spacing | `pt-section-md`, `pb-section-lg`, `px-page`                                      |
+| Breakpoints     | mobile `<768`, `md` ≥768 (tablet), `lg` ≥992 (desktop): same as Webflow          |
 
 Type and spacing tokens switch to their mobile values below 768px automatically.
 
