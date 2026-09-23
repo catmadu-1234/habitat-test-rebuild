@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "title": "AI Note-Taking App, Lecture Capture & Live Captions | Habitat Learn",
+    "description": "Empower students with AI-powered lecture capture, live captions, and professional note-taking via Messenger Pigeon, plus Podium Solution for seamless, inclusive learning at colleges and universities."
+  },
+  "nav": {
+    "logoAlt": "Habitat Learn Logo",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "getStarted": "Get started",
+    "organizations": {
+      "label": "For Organizations",
+      "columns": {
+        "products": {
+          "label": "Products & Services",
+          "items": {
+            "messengerPigeon": {
+              "label": "Messenger Pigeon",
+              "description": "A software solution to modern learner's needs. Notetaking. Live Captions and more."
+            },
+            "podium": {
+              "label": "Podium Solution",
+              "description": "On-device AI solution that makes every lecture accessible to every student."
+            },
+            "liveServices": {
+              "label": "Live Services",
+              "description": "Connect with a team of professional captioners & notetakers."
+            }
+          }
+        },
+        "resources": {
+          "label": "Resources & Insights",
+          "items": {
+            "blog": {
+              "label": "Blogs & Case Studies",
+              "description": "Thoughts on the future of learning, from the people creating it"
+            },
+            "help": {
+              "label": "Help Centre & FAQ",
+              "description": "Latest tips & tricks for best in class student supports."
+            },
+            "security": {
+              "label": "Data & Security Compliance",
+              "description": "Because it's important to you, it's important to us"
+            }
+          }
+        },
+        "start": {
+          "label": "Getting Started",
+          "items": {
+            "login": {
+              "label": "Login",
+              "description": "Login in to your Habitat Admin account."
+            },
+            "bookCall": {
+              "label": "Book A Call",
+              "description": "Talk to our team to find the right solution for your organization"
+            }
+          }
+        }
+      },
+      "promo": {
+        "label": "New Blog: Podium Solution",
+        "imageAlt": "Students studying together around a table with laptops and books"
+      }
+    },
+    "students": {
+      "label": "For Students",
+      "columnLabel": "Get Started & Support",
+      "items": {
+        "messengerPigeon": "Messenger Pigeon",
+        "help": "Help Center & FAQ",
+        "download": "Download The App",
+        "helpAgain": "Help Center & FAQ",
+        "login": "Login"
+      },
+      "promo": {
+        "label": "What's new in Messenger Pigeon"
+      }
+    },
+    "about": "About",
+    "contact": "Contact",
+    "mobile": {
+      "items": {
+        "messengerPigeon": {
+          "label": "Messenger Pigeon",
+          "description": "A software solution to modern learner's needs. Notetaking. Live Captions and more."
+        },
+        "liveServices": {
+          "label": "Live Services",
+          "description": "Connect with a team of professional captioners & notetakers"
+        },
+        "about": {
+          "label": "About Us",
+          "description": "How we work and what we value."
+        },
+        "blog": {
+          "label": "Blog & Insights",
+          "description": "A highly advanced CMS setup for showcasing case studies."
+        },
+        "contact": {
+          "label": "Contact Us",
+          "description": "Talk to our team to find the right solution for your organization"
+        },
+        "login": {
+          "label": "Habitat Admin Login",
+          "description": "Login to your Habitat Admin account."
+        }
+      },
+      "promo": {
+        "label": "New Blog: Mac Minis and Privacy",
+        "imageAlt": "Illustration of laptops with security shields on a purple background"
+      }
+    }
+  },
+  "footer": {
+    "logoAlt": "Habitat Learn Logo",
+    "columns": {
+      "login": {
+        "label": "Login",
+        "items": {
+          "messengerPigeon": "Messenger Pigeon",
+          "admin": "Habitat Admin"
+        }
+      },
+      "company": {
+        "label": "company",
+        "items": {
+          "about": "About Us",
+          "careers": "Careers",
+          "security": "Security",
+          "download": "Download"
+        }
+      },
+      "resources": {
+        "label": "resources",
+        "items": {
+          "help": "Help Centre",
+          "blog": "Blog",
+          "grants": "Grants",
+          "bookCall": "Book a call",
+          "partners": "Partner Program"
+        }
+      },
+      "more": {
+        "label": "More",
+        "items": {
+          "privacy": "Privacy Policy",
+          "securityAi": "Security, Data & AI",
+          "terms": "Terms & Conditions",
+          "accessibility": "Accessibility"
+        }
+      }
+    },
+    "social": {
+      "youtube": "Habitat Learn on YouTube",
+      "linkedin": "Habitat Learn on LinkedIn",
+      "instagram": "Habitat Learn on Instagram",
+      "tiktok": "Messenger Pigeon on TikTok"
+    },
+    "copyright": "© 2026 Habitat learn"
+  }
+}

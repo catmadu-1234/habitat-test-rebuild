@@ -1,0 +1,36 @@
+// Nav/footer links point at the live site until those pages are rebuilt.
+const site = "https://habitatlearn.com";
+
+export const links = {
+  home: site,
+  messengerPigeon: `${site}/messenger-pigeon`,
+  podium: `${site}/podium-solution`,
+  liveServices: `${site}/live-services`,
+  blog: `${site}/blogs/habitat-learn-blog`,
+  help: "https://intercom.help/habitat-learn/en/",
+  security: `${site}/data-and-security-compliance`,
+  adminLogin: "https://admin.habitatlearn.com/login",
+  apply: "https://admin.habitatlearn.com/apply",
+  bookCall: "https://calendly.com/d/cxz2-k35-vxx",
+  messengerPigeonLogin: "https://messengerpigeon.habitatlearn.com/",
+  messengerPigeonDownload: `${site}/messenger-pigeon-download`,
+  whatsNewVideo: "https://www.youtube.com/watch?v=12CeqczH6p8",
+  about: `${site}/about-us`,
+  careers: `${site}/careers`,
+  contact: `${site}/contact-us`,
+  grants: `${site}/funding/bswd-csg-dse-grant`,
+  partners: `${site}/solutiondevelopmentpartnerprogram`,
+  privacy: `${site}/utility/privacy-policy`,
+  securityAi: `${site}/utility/security-privacy-ai-for-institutions`,
+  terms: `${site}/utility/terms-and-conditions`,
+  accessibility: `${site}/utility/accessibility`,
+  youtube: "https://www.youtube.com/@habitatlearn",
+  linkedin: "https://www.linkedin.com/company/habitatlearn",
+  instagram: "https://www.instagram.com/habitatlearn/",
+  tiktok: "https://www.tiktok.com/@messengerpigeonhq",
+  blogPosts: {
+    messengerPigeonV2: `${site}/blog/messenger-pigeon-v2-why-the-small-things-matter`,
+    ottawa: `${site}/blog/building-live-bilingual-captions-at-the-university-of-ottawa-what-we-learned`,
+    wcag: `${site}/blog/wcag-compliance-for-schools-is-changing`,
+  },
+} as const;
