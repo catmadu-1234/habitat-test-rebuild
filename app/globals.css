@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Type-scale variables (desktop/tablet values; mobile overrides below 768px). */
+:root {
+  --fs-h1: 64px;
+  --lh-h1: 72px;
+  --ls-h1: -2.5px;
+  --fs-h2: 38px;
+  --lh-h2: 52px;
+  --ls-h2: -2px;
+  --fs-h3: 40px;
+  --lh-h3: 44px;
+  --ls-h3: -1px;
+  --fs-h4: 32px;
+  --lh-h4: 36px;
+  --ls-h4: -1px;
+  --fs-h6: 24px;
+  --lh-h6: 28px;
+  --ls-h6: -0.5px;
+  --fs-body-1: 20px;
+  --lh-body-1: 28px;
+  --fs-body-2: 16px;
+  --lh-body-2: 24px;
+  --fs-body-3: 14px;
+  --lh-body-3: 20px;
+  --fs-button: 16px;
+  --lh-button: 24px;
+  --fs-label: 14px;
+  --lh-label: 16px;
+  --fs-label-sm: 10px;
+  --lh-label-sm: 12px;
+
+  /* Layout spacing */
+  --section-sm: 80px;
+  --section-md: 120px;
+  --section-lg: 160px;
+  --page-pad: 32px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --fs-h1: 44px;
+    --lh-h1: 48px;
+    --ls-h1: -2px;
+    --fs-h2: 36px;
+    --lh-h2: 40px;
+    --ls-h2: -1.5px;
+    --fs-h3: 32px;
+    --lh-h3: 36px;
+    --ls-h3: -0.5px;
+    --fs-h4: 24px;
+    --lh-h4: 28px;
+    --ls-h4: -1px;
+    --fs-h6: 20px;
+    --lh-h6: 20px;
+    --ls-h6: -0.25px;
+    --fs-body-1: 16px;
+    --lh-body-1: 24px;
+    --fs-body-2: 14px;
+    --lh-body-2: 20px;
+    --fs-body-3: 12px;
+    --lh-body-3: 16px;
+    --fs-button: 14px;
+    --lh-button: 20px;
+    --fs-label: 10px;
+    --lh-label: 12px;
+    --fs-label-sm: 8px;
+    --lh-label-sm: 10px;
+
+    --section-sm: 48px;
+    --section-md: 64px;
+    --section-lg: 96px;
+    --page-pad: 16px;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll-in animation: elements with `animate-on-scroll` fade up as they enter
+   the viewport (CSS scroll-driven animation; no JS). Browsers without support
+   simply show the content. */
+@supports (animation-timeline: view()) {
+  .animate-on-scroll {
+    animation: fade-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll,
+  .animate-marquee {
+    animation: none;
+  }
+}
