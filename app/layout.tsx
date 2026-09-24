@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import { getLocale, getTranslations } from "next-intl/server";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
+import DisableDraftMode from "@/components/ui/DisableDraftMode";
+import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -49,6 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const { isEnabled: isDraftMode } = await draftMode();
 
   return (
     <html lang={locale} className={`${manrope.variable} ${woodland.variable}`}>
@@ -56,6 +61,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Nav />
         <main>{children}</main>
         <Footer />
+        <SanityLive />
+        {isDraftMode && (
+          <>
+            <DisableDraftMode />
+            <VisualEditing />
+          </>
+        )}
       </body>
     </html>
   );

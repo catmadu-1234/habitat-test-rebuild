@@ -8,13 +8,16 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "cf:build": "opennextjs-cloudflare build",
-    "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "cf:build": "rm -rf .next && opennextjs-cloudflare build",
+    "cf:preview": "rm -rf .next && opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf:deploy": "rm -rf .next && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "prebuild": "rm -rf .next/cache/fetch-cache"
   },
   "dependencies": {
+    "@sanity/image-url": "^2.1.1",
     "next": "16.3.6",
     "next-intl": "^4.14.6",
+    "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
