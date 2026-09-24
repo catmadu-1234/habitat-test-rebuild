@@ -97,6 +97,13 @@ Mode and no one else may have the site open. So a Sanity **webhook** also calls 
 API → Webhooks: URL `https://<site>/api/revalidate`, dataset `production`, trigger on create/update/delete, filter
 `_type in ["homePage", "siteSettings", "post"]`, HTTP method POST, and the same secret.
 
+### Where things are deployed
+
+- Site: https://habitat-test-rebuild.jake-cogan.workers.dev (Cloudflare Workers)
+- Studio: https://habitat-learn.sanity.studio (`npx sanity deploy` in the Studio folder; its Presentation tool previews the site above)
+- A publish webhook (Sanity Manage → API → Webhooks, "Habitat site: revalidate on publish") calls `/api/revalidate`. On real
+  Cloudflare KV a publish takes about a minute to show on the site.
+
 ## Design tokens
 
 Tokens mirror the Webflow site's variables and live in `tailwind.config.ts` (with responsive values in
