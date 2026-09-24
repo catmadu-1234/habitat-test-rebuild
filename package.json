@@ -12,7 +12,9 @@
     "cf:preview": "rm -rf .next && opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:deploy": "rm -rf .next && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "prebuild": "rm -rf .next/cache/fetch-cache",
-    "test": "node --test lib/*.test.ts sanity/lib/*.test.ts"
+    "test": "node --test lib/*.test.ts sanity/lib/*.test.ts",
+    "typegen": "npm --prefix ../studio-habitat-learn-test run typegen",
+    "seed": "npm --prefix ../studio-habitat-learn-test run seed"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",
