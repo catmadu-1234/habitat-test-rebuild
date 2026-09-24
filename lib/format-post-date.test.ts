@@ -16,3 +16,10 @@ test("does not shift the month at year boundaries", () => {
 test("writes September as Sep", () => {
   assert.equal(formatPostDate("2026-09-15"), "Sep 2026");
 });
+
+test("returns an empty string for a missing or unparsable date (half-filled draft posts)", () => {
+  assert.equal(formatPostDate(undefined), "");
+  assert.equal(formatPostDate(null), "");
+  assert.equal(formatPostDate(""), "");
+  assert.equal(formatPostDate("not-a-date"), "");
+});

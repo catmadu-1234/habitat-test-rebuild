@@ -27,4 +27,7 @@ export const HOME_CONTACT_QUERY = defineQuery(
   `*[_type == "homePage" && _id == "homePage-en"][0].contact`,
 );
 
-export const HOME_POSTS_QUERY = defineQuery(`*[_type == "post"] | order(date desc)[0...3]`);
+// Only complete posts: in Draft Mode a half-filled draft would otherwise crash the page mid-edit.
+export const HOME_POSTS_QUERY = defineQuery(
+  `*[_type == "post" && defined(date) && defined(url) && defined(image.asset)] | order(date desc)[0...3]`,
+);

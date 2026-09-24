@@ -33,7 +33,7 @@ export default async function Hero() {
       {/* Social proof */}
       <div className="mb-12 flex flex-col items-center gap-3 md:mb-16 md:gap-4">
         <div className="flex">
-          {hero.avatars.map((avatar, index) => (
+          {(hero.avatars ?? []).map((avatar, index) => (
             <div
               key={avatar._key}
               className={`relative h-10 w-10 flex-none overflow-hidden rounded-full border-2 border-paper md:h-12 md:w-12 ${index > 0 ? "-ml-4" : ""}`}

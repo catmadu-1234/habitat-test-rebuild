@@ -83,7 +83,7 @@ stops for explicit confirmation before running `wrangler kv namespace create`.
 
 Modelling rule: **mirror the current JSON shape** so component diffs stay small (`t("hero.title")` becomes
 `hero.title`). Use arrays only where an editor should add/remove/reorder items; use named objects where the layout
-depends on a fixed set (nav, footer). Every image field has `hotspot: true` and a required `alt` sub-field
+depends on a fixed set (nav, footer). Every image field has `hotspot: true` (it is what enables Sanity's crop tool; only the crop is honoured on the site, the focal point is not) and a required `alt` sub-field
 (`alt` replaces the current `*.imageAlt` strings).
 
 **Singletons** (fixed IDs, created by the seed, pinned in Studio structure, hidden from "New document", delete and
@@ -129,7 +129,7 @@ UI icons (SVG), the decorative `grow.png`, all Tailwind classes and tokens, and 
 - **Section components** stay async server components and keep their markup and classes. Each fetches its slice
   (`*[_id == "homePage-en"][0].hero`) instead of `getTranslations`. Nav/Footer/metadata fetch `siteSettings-en`.
 - **`components/ui/SanityImage.tsx`:** wraps `next/image`, keeps the existing `fill` + `sizes` + `quality` props,
-  builds the URL with `urlFor`, applies LQIP and hotspot (`object-position`). `next.config.ts` gains
+  builds the URL with `urlFor`, which applies the editor's crop. Hotspot (`object-position`) and LQIP blur-up are intentionally not implemented: the former needs an inline `style` (banned by CLAUDE.md), and image fields tell editors to use Crop. `next.config.ts` gains
   `images.remotePatterns` for `cdn.sanity.io`.
 - **Layout:** render `<SanityLive />`; in Draft Mode render `<VisualEditing />` and a small "Disable Draft Mode"
   button. Add `app/api/draft-mode/enable/route.ts` (`defineEnableDraftMode`).
@@ -179,7 +179,8 @@ UI icons (SVG), the decorative `grow.png`, all Tailwind classes and tokens, and 
 | Variable | Where | Notes |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` | site `.env.local`, Workers vars | `uruh3czl`, `production` |
-| `SANITY_API_READ_TOKEN` | site `.env.local`, Workers secret (`wrangler secret put`) | Viewer token; server only, never in client bundles |
+| `SANITY_API_READ_TOKEN` | site `.env.local`, Workers secret (`wrangler secret put`) | Viewer token. Server-side, and sent to the browser only while Draft Mode is on (`browserToken`), so it must stay read-only |
+| `SANITY_REVALIDATE_SECRET` | site `.env.local`/`.dev.vars`, Workers secret | shared with the Sanity publish webhook for `POST /api/revalidate` |
 | `SANITY_STUDIO_PREVIEW_ORIGIN` | `.env` in the Studio folder | site URL for Presentation |
 
 `.env*` is already gitignored. Tokens are created in Sanity Manage by the user; I never ask for them in chat.

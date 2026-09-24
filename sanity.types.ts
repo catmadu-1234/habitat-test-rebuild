@@ -674,7 +674,7 @@ export type HOME_CONTACT_QUERY_RESULT = ContactSection | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: HOME_POSTS_QUERY
-// Query: *[_type == "post"] | order(date desc)[0...3]
+// Query: *[_type == "post" && defined(date) && defined(url) && defined(image.asset)] | order(date desc)[0...3]
 export type HOME_POSTS_QUERY_RESULT = Array<{
   _id: string;
   _type: "post";
@@ -699,7 +699,7 @@ declare global {
     "*[_type == \"homePage\" && _id == \"homePage-en\"][0].products": HOME_PRODUCTS_QUERY_RESULT;
     "*[_type == \"homePage\" && _id == \"homePage-en\"][0].blog": HOME_BLOG_QUERY_RESULT;
     "*[_type == \"homePage\" && _id == \"homePage-en\"][0].contact": HOME_CONTACT_QUERY_RESULT;
-    "*[_type == \"post\"] | order(date desc)[0...3]": HOME_POSTS_QUERY_RESULT;
+    "*[_type == \"post\" && defined(date) && defined(url) && defined(image.asset)] | order(date desc)[0...3]": HOME_POSTS_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

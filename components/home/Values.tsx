@@ -29,7 +29,7 @@ export default async function Values() {
         </div>
 
         <div className="border-t border-brand-purple/16">
-          {values.items.map((item) => (
+          {(values.items ?? []).map((item) => (
             <div
               key={item._key}
               className="animate-on-scroll grid grid-cols-1 gap-3 border-b border-brand-purple/16 py-4 md:grid-cols-2 md:gap-4 md:py-6"

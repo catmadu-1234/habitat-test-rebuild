@@ -42,7 +42,7 @@ export default async function Contact() {
                       aria-hidden={copy === 1}
                       className="flex shrink-0 items-center gap-20 pr-20"
                     >
-                      {contact.partners.map((partner) => (
+                      {(contact.partners ?? []).map((partner) => (
                         <li key={partner._key}>
                           <SanityImage
                             image={partner}

@@ -37,12 +37,13 @@ npx sanity deploy    # publish the Studio to <name>.sanity.studio
 
 Environment for this app (`.env.local` locally, `.dev.vars` for `npm run cf:preview`, Workers secrets in production):
 
-| Variable                        | Purpose                                                                                                |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `SANITY_API_READ_TOKEN`         | **Viewer** token, server only. Needed for Draft Mode/Presentation; published content works without it. |
-| `NEXT_PUBLIC_SANITY_STUDIO_URL` | Deployed Studio URL (used for click-to-edit links). Defaults to `http://localhost:3333`.               |
+| Variable                        | Purpose                                                                                                                                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SANITY_API_READ_TOKEN`         | **Viewer** (read-only) token. Needed for Draft Mode/Presentation. In Draft Mode it is also sent to the browser (so drafts update live), which is why it must be Viewer-only.                                       |
+| `SANITY_REVALIDATE_SECRET`      | Secret shared with the Sanity publish webhook (see below).                                                                                                                                                         |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL` | Deployed Studio URL, used for click-to-edit links. It is inlined at **build** time, so set it in `.env.local` before `npm run cf:build`/`cf:deploy`, not as a Workers secret. Defaults to `http://localhost:3333`. |
 
-Set the secret on Cloudflare with `npx wrangler secret put SANITY_API_READ_TOKEN`. Add each site origin to
+Set the secrets on Cloudflare with `npx wrangler secret put SANITY_API_READ_TOKEN` and `npx wrangler secret put SANITY_REVALIDATE_SECRET`. Add each site origin to
 Sanity CORS with credentials (`npx sanity cors add <origin> --credentials` in the Studio folder).
 
 ## Deploy to Vercel
@@ -87,6 +88,14 @@ lib/                 small helpers (cn, formatPostDate)
 public/images|video  static UI assets only: icons, logos, posters, hero and nav videos
 tailwind.config.ts   design tokens (colors, type scale, spacing, radii, shadows, breakpoints)
 ```
+
+### Publishing reaches the live site
+
+Visitors' browsers get live updates through `<SanityLive />`, but an editor publishing from Presentation is in Draft
+Mode and no one else may have the site open. So a Sanity **webhook** also calls `POST /api/revalidate` on publish
+(signed with `SANITY_REVALIDATE_SECRET`), which expires every cached Sanity fetch. Create it in Sanity Manage →
+API → Webhooks: URL `https://<site>/api/revalidate`, dataset `production`, trigger on create/update/delete, filter
+`_type in ["homePage", "siteSettings", "post"]`, HTTP method POST, and the same secret.
 
 ## Design tokens
 

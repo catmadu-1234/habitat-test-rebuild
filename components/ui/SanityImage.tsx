@@ -11,7 +11,8 @@ export type SanityImageValue = {
 };
 
 type SanityImageProps = Omit<ImageProps, "src" | "alt"> & {
-  image: SanityImageValue;
+  /** May be missing while an editor is mid-edit in Draft Mode; nothing renders then. */
+  image?: SanityImageValue | null;
   /** Overrides the editor's alt text; pass "" for a decorative repeat of another image. */
   alt?: string;
 };
@@ -19,7 +20,7 @@ type SanityImageProps = Omit<ImageProps, "src" | "alt"> & {
 // next/image for a Sanity image. The editor's crop is applied by urlFor; resizing is left to
 // next/image. Renders nothing if the editor removed the asset, so the page never crashes.
 export default function SanityImage({ image, alt, ...props }: SanityImageProps) {
-  if (!image.asset) return null;
+  if (!image?.asset) return null;
 
   return (
     <Image src={urlFor(image as SanityImageSource).url()} alt={alt ?? image.alt ?? ""} {...props} />

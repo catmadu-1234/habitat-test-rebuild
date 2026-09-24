@@ -6,6 +6,9 @@ const formatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
-export function formatPostDate(date: string): string {
-  return formatter.format(new Date(`${date}T00:00:00Z`));
+// A draft post in Presentation can have no date yet; render nothing instead of throwing.
+export function formatPostDate(date: string | null | undefined): string {
+  if (!date) return "";
+  const parsed = new Date(`${date}T00:00:00Z`);
+  return Number.isNaN(parsed.getTime()) ? "" : formatter.format(parsed);
 }

@@ -8,6 +8,7 @@ import Nav from "@/components/layout/Nav";
 import DisableDraftMode from "@/components/ui/DisableDraftMode";
 import type { SanityImageSource } from "@sanity/image-url";
 import { revalidateSanityTags } from "@/app/actions/revalidate-sanity";
+import { SANITY_CACHE_TAG } from "@/sanity/lib/cache-tag";
 import { urlFor } from "@/sanity/lib/image";
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
 import { SITE_META_QUERY } from "@/sanity/queries";
@@ -30,10 +31,16 @@ const woodland = localFont({
 
 export async function generateMetadata(): Promise<Metadata> {
   // stega must be off here: invisible characters must never reach <head>.
-  const { data: meta } = await sanityFetch({ query: SITE_META_QUERY, stega: false });
+  const { data: meta } = await sanityFetch({
+    query: SITE_META_QUERY,
+    stega: false,
+    tags: [SANITY_CACHE_TAG],
+  });
   if (!meta) throw new Error("No siteSettings meta found. Create the document in the Studio.");
-  // Generated image types mark `asset` optional, so cast like SanityImage does.
-  const ogImage = meta.ogImage ? [urlFor(meta.ogImage as SanityImageSource).url()] : undefined;
+  // Skip the image if an editor cleared the asset (urlFor throws on an asset-less image).
+  const ogImage = meta.ogImage?.asset
+    ? [urlFor(meta.ogImage as SanityImageSource).url()]
+    : undefined;
 
   return {
     // Vercel exposes the production domain; fall back to localhost in dev.
