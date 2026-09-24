@@ -22,9 +22,9 @@ export type FollowUp = {
 };
 
 export type Items = {
-  messengerPigeon?: ProductCard;
-  podium?: ProductCard;
-  liveServices?: ProductCard;
+  messengerPigeon: ProductCard;
+  podium: ProductCard;
+  liveServices: ProductCard;
 };
 
 export type Form = {
@@ -165,24 +165,24 @@ export type SiteSettings = {
         products: {
           label: string;
           items: {
-            messengerPigeon?: NavItem;
-            podium?: NavItem;
-            liveServices?: NavItem;
+            messengerPigeon: NavItem;
+            podium: NavItem;
+            liveServices: NavItem;
           };
         };
         resources: {
           label: string;
           items: {
-            blog?: NavItem;
-            help?: NavItem;
-            security?: NavItem;
+            blog: NavItem;
+            help: NavItem;
+            security: NavItem;
           };
         };
         start: {
           label: string;
           items: {
-            login?: NavItem;
-            bookCall?: NavItem;
+            login: NavItem;
+            bookCall: NavItem;
           };
         };
       };
@@ -209,12 +209,12 @@ export type SiteSettings = {
     contact: string;
     mobile: {
       items: {
-        messengerPigeon?: NavItem;
-        liveServices?: NavItem;
-        about?: NavItem;
-        blog?: NavItem;
-        contact?: NavItem;
-        login?: NavItem;
+        messengerPigeon: NavItem;
+        liveServices: NavItem;
+        about: NavItem;
+        blog: NavItem;
+        contact: NavItem;
+        login: NavItem;
       };
       promo: {
         label: string;
@@ -466,24 +466,24 @@ export type SITE_SETTINGS_QUERY_RESULT = {
         products: {
           label: string;
           items: {
-            messengerPigeon?: NavItem;
-            podium?: NavItem;
-            liveServices?: NavItem;
+            messengerPigeon: NavItem;
+            podium: NavItem;
+            liveServices: NavItem;
           };
         };
         resources: {
           label: string;
           items: {
-            blog?: NavItem;
-            help?: NavItem;
-            security?: NavItem;
+            blog: NavItem;
+            help: NavItem;
+            security: NavItem;
           };
         };
         start: {
           label: string;
           items: {
-            login?: NavItem;
-            bookCall?: NavItem;
+            login: NavItem;
+            bookCall: NavItem;
           };
         };
       };
@@ -510,12 +510,12 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     contact: string;
     mobile: {
       items: {
-        messengerPigeon?: NavItem;
-        liveServices?: NavItem;
-        about?: NavItem;
-        blog?: NavItem;
-        contact?: NavItem;
-        login?: NavItem;
+        messengerPigeon: NavItem;
+        liveServices: NavItem;
+        about: NavItem;
+        blog: NavItem;
+        contact: NavItem;
+        login: NavItem;
       };
       promo: {
         label: string;
