@@ -28,6 +28,22 @@ async function capture(label, baseUrl = "http://localhost:3100") {
   mkdirSync(dir, { recursive: true });
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
   const heights = {};
+  const brokenImages = {};
+
+  // Warm-up: the first load after a server start waits on next/image optimisation, which
+  // leaves images half-decoded in the first screenshots. Load the page once per width first.
+  for (const { width, height } of viewports) {
+    const warm = await browser.newPage({ viewport: { width, height } });
+    await warm.goto(baseUrl, { waitUntil: "networkidle" });
+    await warm.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 500) {
+        window.scrollTo(0, y);
+        await new Promise((resolve) => setTimeout(resolve, 80));
+      }
+    });
+    await warm.waitForLoadState("networkidle");
+    await warm.close();
+  }
 
   for (const { width, height } of viewports) {
     const page = await browser.newPage({ viewport: { width, height } });
@@ -42,6 +58,17 @@ async function capture(label, baseUrl = "http://localhost:3100") {
       window.scrollTo(0, 0);
     });
     await page.waitForLoadState("networkidle");
+    // Force every lazy image to load and decode, then record any that failed.
+    const broken = await page.evaluate(async () => {
+      document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
+        img.loading = "eager";
+      });
+      await Promise.all([...document.images].map((img) => img.decode().catch(() => {})));
+      return [...document.images].filter((img) => !img.naturalWidth).map((img) => img.src);
+    });
+    if (broken.length)
+      console.log(`${width}: ${broken.length} broken image(s): ${broken.join(", ")}`);
+    brokenImages[width] = broken.length;
     await page.evaluate(() => document.fonts.ready);
     heights[width] = await page.evaluate(() =>
       [...document.querySelectorAll("main > section, footer")].map((el) =>
@@ -54,6 +81,7 @@ async function capture(label, baseUrl = "http://localhost:3100") {
 
   await browser.close();
   writeFileSync(path.join(dir, "heights.json"), JSON.stringify(heights, null, 2));
+  writeFileSync(path.join(dir, "broken.json"), JSON.stringify(brokenImages));
   console.log(`${label}: ${JSON.stringify(heights)}`);
 }
 
@@ -80,6 +108,14 @@ function compare(baseline, candidate) {
     writeFileSync(path.join(outRoot, candidate, `diff-${width}.png`), PNG.sync.write(diff));
     console.log(`${width}: ${changed} px differ (${(ratio * 100).toFixed(3)}%)`);
     if (ratio > maxDiffRatio) failed = true;
+  }
+
+  const brokenB = JSON.parse(readFileSync(path.join(outRoot, candidate, "broken.json"), "utf8"));
+  for (const [width, count] of Object.entries(brokenB)) {
+    if (count > 0) {
+      console.log(`${width}: ${count} broken image(s) in candidate`);
+      failed = true;
+    }
   }
 
   console.log(failed ? "FAIL" : "PASS");
