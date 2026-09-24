@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Build output and tooling, not part of the site source:
+    ".open-next/**",
+    ".wrangler/**",
+    "scripts/**",
+    "sanity.types.ts",
   ]),
 ]);
 

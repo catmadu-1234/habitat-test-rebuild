@@ -43,3 +43,13 @@ next-env.d.ts
 # cloudflare
 /.open-next
 /.wrangler
+
+# visual regression output and harness deps
+/.visual/
+/scripts/visual/node_modules
+
+# wrangler local secrets
+.dev.vars
+
+# executing-plans ledger/workspace
+/.superpowers/

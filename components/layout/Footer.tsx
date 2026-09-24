@@ -1,56 +1,67 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { stegaClean } from "next-sanity";
 import Label from "@/components/ui/Label";
-import { links } from "@/lib/links";
-
-// [translation key, href] per column. Copy lives in locales/en/common.json (footer.*).
-const columns = [
-  {
-    key: "login",
-    items: [
-      ["messengerPigeon", links.messengerPigeonLogin],
-      ["admin", links.adminLogin],
-    ],
-  },
-  {
-    key: "company",
-    items: [
-      ["about", links.about],
-      ["careers", links.careers],
-      ["security", links.security],
-      ["download", links.messengerPigeonDownload],
-    ],
-  },
-  {
-    key: "resources",
-    items: [
-      ["help", links.help],
-      ["blog", links.blog],
-      ["grants", links.grants],
-      ["bookCall", links.contact],
-      ["partners", links.partners],
-    ],
-  },
-  {
-    key: "more",
-    items: [
-      ["privacy", links.privacy],
-      ["securityAi", links.securityAi],
-      ["terms", links.terms],
-      ["accessibility", links.accessibility],
-    ],
-  },
-] as const;
-
-const social = [
-  ["youtube", links.youtube],
-  ["linkedin", links.linkedin],
-  ["instagram", links.instagram],
-  ["tiktok", links.tiktok],
-] as const;
+import { getSiteSettings } from "@/sanity/lib/site";
 
 export default async function Footer() {
-  const t = await getTranslations("common.footer");
+  const settings = await getSiteSettings();
+  const { footer } = settings;
+  const links = stegaClean(settings.links);
+  const { login, company, resources, more } = footer.columns;
+
+  // Which link each entry points to stays in code; labels and URLs come from Sanity.
+  const columns = [
+    {
+      key: "login",
+      label: login.label,
+      items: [
+        {
+          key: "messengerPigeon",
+          label: login.items.messengerPigeon,
+          href: links.messengerPigeonLogin,
+        },
+        { key: "admin", label: login.items.admin, href: links.adminLogin },
+      ],
+    },
+    {
+      key: "company",
+      label: company.label,
+      items: [
+        { key: "about", label: company.items.about, href: links.about },
+        { key: "careers", label: company.items.careers, href: links.careers },
+        { key: "security", label: company.items.security, href: links.security },
+        { key: "download", label: company.items.download, href: links.messengerPigeonDownload },
+      ],
+    },
+    {
+      key: "resources",
+      label: resources.label,
+      items: [
+        { key: "help", label: resources.items.help, href: links.help },
+        { key: "blog", label: resources.items.blog, href: links.blog },
+        { key: "grants", label: resources.items.grants, href: links.grants },
+        { key: "bookCall", label: resources.items.bookCall, href: links.contact },
+        { key: "partners", label: resources.items.partners, href: links.partners },
+      ],
+    },
+    {
+      key: "more",
+      label: more.label,
+      items: [
+        { key: "privacy", label: more.items.privacy, href: links.privacy },
+        { key: "securityAi", label: more.items.securityAi, href: links.securityAi },
+        { key: "terms", label: more.items.terms, href: links.terms },
+        { key: "accessibility", label: more.items.accessibility, href: links.accessibility },
+      ],
+    },
+  ];
+
+  const social = [
+    { key: "youtube", label: footer.social.youtube, href: links.youtube },
+    { key: "linkedin", label: footer.social.linkedin, href: links.linkedin },
+    { key: "instagram", label: footer.social.instagram, href: links.instagram },
+    { key: "tiktok", label: footer.social.tiktok, href: links.tiktok },
+  ];
 
   return (
     <footer className="relative z-[1] bg-brand-green pb-4 pt-12 text-paper/88 md:pb-8 md:pt-20">
@@ -59,7 +70,7 @@ export default async function Footer() {
           <a href={links.home} className="block w-[136px] md:w-[170px]">
             <Image
               src="/images/logos/habitat-learn-logo-white.png"
-              alt={t("logoAlt")}
+              alt={footer.logoAlt}
               width={1975}
               height={907}
               className="h-auto w-full"
@@ -70,12 +81,16 @@ export default async function Footer() {
             {columns.map((column) => (
               <div key={column.key} className="flex flex-col gap-4 md:gap-5">
                 <Label size="sm" className="text-paper/64">
-                  {t(`columns.${column.key}.label`)}
+                  {column.label}
                 </Label>
                 <div className="flex flex-col">
-                  {column.items.map(([key, href]) => (
-                    <a key={key} href={href} className="transition-opacity hover:opacity-70">
-                      {t(`columns.${column.key}.items.${key}`)}
+                  {column.items.map((item) => (
+                    <a
+                      key={item.key}
+                      href={item.href}
+                      className="transition-opacity hover:opacity-70"
+                    >
+                      {item.label}
                     </a>
                   ))}
                 </div>
@@ -86,15 +101,15 @@ export default async function Footer() {
 
         <div className="flex items-center justify-between gap-6 border-t border-paper/16 pb-6 pt-8 md:gap-8 md:pb-8 md:pt-12">
           <div className="flex items-center gap-3 md:gap-4">
-            {social.map(([key, href]) => (
+            {social.map((item) => (
               <a
-                key={key}
-                href={href}
+                key={item.key}
+                href={item.href}
                 className="block h-3 w-3 transition-opacity hover:opacity-50 md:h-4 md:w-4"
               >
                 <Image
-                  src={`/images/icons/${key}.svg`}
-                  alt={t(`social.${key}`)}
+                  src={`/images/icons/${item.key}.svg`}
+                  alt={item.label}
                   width={16}
                   height={16}
                   className="h-full w-full"
@@ -104,7 +119,7 @@ export default async function Footer() {
             ))}
           </div>
           <Label size="sm" className="text-paper/64">
-            {t("copyright")}
+            {footer.copyright}
           </Label>
         </div>
       </div>
