@@ -7,6 +7,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
 import DisableDraftMode from "@/components/ui/DisableDraftMode";
+import { revalidateSanityTags } from "@/app/actions/revalidate-sanity";
 import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
@@ -61,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Nav />
         <main>{children}</main>
         <Footer />
-        <SanityLive />
+        <SanityLive action={revalidateSanityTags} />
         {isDraftMode && (
           <>
             <DisableDraftMode />
