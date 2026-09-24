@@ -45,7 +45,7 @@ export type ContactSection = {
   partners: Array<{
     _key: string;
   } & ImageWithAlt>;
-  form?: Form;
+  form: Form;
 };
 
 export type BlogSection = {
@@ -61,7 +61,7 @@ export type ProductsSection = {
   title: string;
   description: string;
   learnMore: string;
-  items?: Items;
+  items: Items;
 };
 
 export type ValuesSection = {
@@ -91,7 +91,7 @@ export type HeroSection = {
     _key: string;
   } & ImageWithAlt>;
   teamImage: ImageWithAlt;
-  followUp?: FollowUp;
+  followUp: FollowUp;
 };
 
 export type ProductCard = {
@@ -143,7 +143,7 @@ export type SiteSettings = {
   _updatedAt: string;
   _rev: string;
   language?: string;
-  meta?: {
+  meta: {
     title: string;
     description: string;
     ogImage: {
@@ -154,61 +154,61 @@ export type SiteSettings = {
       _type: "image";
     };
   };
-  nav?: {
+  nav: {
     logoAlt: string;
     openMenu: string;
     closeMenu: string;
     getStarted: string;
-    organizations?: {
+    organizations: {
       label: string;
-      columns?: {
-        products?: {
+      columns: {
+        products: {
           label: string;
-          items?: {
+          items: {
             messengerPigeon?: NavItem;
             podium?: NavItem;
             liveServices?: NavItem;
           };
         };
-        resources?: {
+        resources: {
           label: string;
-          items?: {
+          items: {
             blog?: NavItem;
             help?: NavItem;
             security?: NavItem;
           };
         };
-        start?: {
+        start: {
           label: string;
-          items?: {
+          items: {
             login?: NavItem;
             bookCall?: NavItem;
           };
         };
       };
-      promo?: {
+      promo: {
         label: string;
         image: ImageWithAlt;
       };
     };
-    students?: {
+    students: {
       label: string;
       columnLabel: string;
-      items?: {
+      items: {
         messengerPigeon: string;
         help: string;
         download: string;
         helpAgain: string;
         login: string;
       };
-      promo?: {
+      promo: {
         label: string;
       };
     };
     about: string;
     contact: string;
-    mobile?: {
-      items?: {
+    mobile: {
+      items: {
         messengerPigeon?: NavItem;
         liveServices?: NavItem;
         about?: NavItem;
@@ -216,34 +216,34 @@ export type SiteSettings = {
         contact?: NavItem;
         login?: NavItem;
       };
-      promo?: {
+      promo: {
         label: string;
         image: ImageWithAlt;
       };
     };
   };
-  footer?: {
+  footer: {
     logoAlt: string;
-    columns?: {
-      login?: {
+    columns: {
+      login: {
         label: string;
-        items?: {
+        items: {
           messengerPigeon: string;
           admin: string;
         };
       };
-      company?: {
+      company: {
         label: string;
-        items?: {
+        items: {
           about: string;
           careers: string;
           security: string;
           download: string;
         };
       };
-      resources?: {
+      resources: {
         label: string;
-        items?: {
+        items: {
           help: string;
           blog: string;
           grants: string;
@@ -251,9 +251,9 @@ export type SiteSettings = {
           partners: string;
         };
       };
-      more?: {
+      more: {
         label: string;
-        items?: {
+        items: {
           privacy: string;
           securityAi: string;
           terms: string;
@@ -261,7 +261,7 @@ export type SiteSettings = {
         };
       };
     };
-    social?: {
+    social: {
       youtube: string;
       linkedin: string;
       instagram: string;
@@ -269,7 +269,7 @@ export type SiteSettings = {
     };
     copyright: string;
   };
-  links?: {
+  links: {
     home: string;
     messengerPigeon: string;
     podium: string;
@@ -436,79 +436,15 @@ export type AllSanitySchemaTypes = FollowUp | Items | Form | ContactSection | Bl
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_id == "siteSettings-en"][0]
+// Query: *[_type == "siteSettings" && _id == "siteSettings-en"][0]
 export type SITE_SETTINGS_QUERY_RESULT = {
-  _id: "siteSettings-en";
-  _type: "homePage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  language?: string;
-  hero: HeroSection;
-  values: ValuesSection;
-  products: ProductsSection;
-  blog: BlogSection;
-  contact: ContactSection;
-} | {
-  _id: "siteSettings-en";
-  _type: "post";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  category: string;
-  date: string;
-  image: ImageWithAlt;
-  url: string;
-} | {
-  _id: "siteSettings-en";
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
-  uploadId?: string;
-  path: string;
-  url: string;
-  source?: SanityAssetSourceData;
-} | {
-  _id: "siteSettings-en";
-  _type: "sanity.imageAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
-  uploadId?: string;
-  path: string;
-  url: string;
-  metadata?: SanityImageMetadata;
-  source?: SanityAssetSourceData;
-} | {
   _id: "siteSettings-en";
   _type: "siteSettings";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   language?: string;
-  meta?: {
+  meta: {
     title: string;
     description: string;
     ogImage: {
@@ -519,61 +455,61 @@ export type SITE_SETTINGS_QUERY_RESULT = {
       _type: "image";
     };
   };
-  nav?: {
+  nav: {
     logoAlt: string;
     openMenu: string;
     closeMenu: string;
     getStarted: string;
-    organizations?: {
+    organizations: {
       label: string;
-      columns?: {
-        products?: {
+      columns: {
+        products: {
           label: string;
-          items?: {
+          items: {
             messengerPigeon?: NavItem;
             podium?: NavItem;
             liveServices?: NavItem;
           };
         };
-        resources?: {
+        resources: {
           label: string;
-          items?: {
+          items: {
             blog?: NavItem;
             help?: NavItem;
             security?: NavItem;
           };
         };
-        start?: {
+        start: {
           label: string;
-          items?: {
+          items: {
             login?: NavItem;
             bookCall?: NavItem;
           };
         };
       };
-      promo?: {
+      promo: {
         label: string;
         image: ImageWithAlt;
       };
     };
-    students?: {
+    students: {
       label: string;
       columnLabel: string;
-      items?: {
+      items: {
         messengerPigeon: string;
         help: string;
         download: string;
         helpAgain: string;
         login: string;
       };
-      promo?: {
+      promo: {
         label: string;
       };
     };
     about: string;
     contact: string;
-    mobile?: {
-      items?: {
+    mobile: {
+      items: {
         messengerPigeon?: NavItem;
         liveServices?: NavItem;
         about?: NavItem;
@@ -581,34 +517,34 @@ export type SITE_SETTINGS_QUERY_RESULT = {
         contact?: NavItem;
         login?: NavItem;
       };
-      promo?: {
+      promo: {
         label: string;
         image: ImageWithAlt;
       };
     };
   };
-  footer?: {
+  footer: {
     logoAlt: string;
-    columns?: {
-      login?: {
+    columns: {
+      login: {
         label: string;
-        items?: {
+        items: {
           messengerPigeon: string;
           admin: string;
         };
       };
-      company?: {
+      company: {
         label: string;
-        items?: {
+        items: {
           about: string;
           careers: string;
           security: string;
           download: string;
         };
       };
-      resources?: {
+      resources: {
         label: string;
-        items?: {
+        items: {
           help: string;
           blog: string;
           grants: string;
@@ -616,9 +552,9 @@ export type SITE_SETTINGS_QUERY_RESULT = {
           partners: string;
         };
       };
-      more?: {
+      more: {
         label: string;
-        items?: {
+        items: {
           privacy: string;
           securityAi: string;
           terms: string;
@@ -626,7 +562,7 @@ export type SITE_SETTINGS_QUERY_RESULT = {
         };
       };
     };
-    social?: {
+    social: {
       youtube: string;
       linkedin: string;
       instagram: string;
@@ -634,7 +570,7 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     };
     copyright: string;
   };
-  links?: {
+  links: {
     home: string;
     messengerPigeon: string;
     podium: string;
@@ -666,8 +602,8 @@ export type SITE_SETTINGS_QUERY_RESULT = {
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: SITE_META_QUERY
-// Query: *[_id == "siteSettings-en"][0].meta
-export type SITE_META_QUERY_RESULT = null | {
+// Query: *[_type == "siteSettings" && _id == "siteSettings-en"][0].meta
+export type SITE_META_QUERY_RESULT = {
   title: string;
   description: string;
   ogImage: {
@@ -677,12 +613,12 @@ export type SITE_META_QUERY_RESULT = null | {
     crop?: SanityImageCrop;
     _type: "image";
   };
-};
+} | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: SITE_LINKS_QUERY
-// Query: *[_id == "siteSettings-en"][0].links
-export type SITE_LINKS_QUERY_RESULT = null | {
+// Query: *[_type == "siteSettings" && _id == "siteSettings-en"][0].links
+export type SITE_LINKS_QUERY_RESULT = {
   home: string;
   messengerPigeon: string;
   podium: string;
@@ -709,31 +645,31 @@ export type SITE_LINKS_QUERY_RESULT = null | {
   linkedin: string;
   instagram: string;
   tiktok: string;
-};
+} | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: HOME_HERO_QUERY
-// Query: *[_id == "homePage-en"][0].hero
+// Query: *[_type == "homePage" && _id == "homePage-en"][0].hero
 export type HOME_HERO_QUERY_RESULT = HeroSection | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: HOME_VALUES_QUERY
-// Query: *[_id == "homePage-en"][0].values
+// Query: *[_type == "homePage" && _id == "homePage-en"][0].values
 export type HOME_VALUES_QUERY_RESULT = ValuesSection | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: HOME_PRODUCTS_QUERY
-// Query: *[_id == "homePage-en"][0].products
+// Query: *[_type == "homePage" && _id == "homePage-en"][0].products
 export type HOME_PRODUCTS_QUERY_RESULT = ProductsSection | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: HOME_BLOG_QUERY
-// Query: *[_id == "homePage-en"][0].blog
+// Query: *[_type == "homePage" && _id == "homePage-en"][0].blog
 export type HOME_BLOG_QUERY_RESULT = BlogSection | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: HOME_CONTACT_QUERY
-// Query: *[_id == "homePage-en"][0].contact
+// Query: *[_type == "homePage" && _id == "homePage-en"][0].contact
 export type HOME_CONTACT_QUERY_RESULT = ContactSection | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
@@ -755,14 +691,14 @@ export type HOME_POSTS_QUERY_RESULT = Array<{
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    "*[_id == \"siteSettings-en\"][0]": SITE_SETTINGS_QUERY_RESULT;
-    "*[_id == \"siteSettings-en\"][0].meta": SITE_META_QUERY_RESULT;
-    "*[_id == \"siteSettings-en\"][0].links": SITE_LINKS_QUERY_RESULT;
-    "*[_id == \"homePage-en\"][0].hero": HOME_HERO_QUERY_RESULT;
-    "*[_id == \"homePage-en\"][0].values": HOME_VALUES_QUERY_RESULT;
-    "*[_id == \"homePage-en\"][0].products": HOME_PRODUCTS_QUERY_RESULT;
-    "*[_id == \"homePage-en\"][0].blog": HOME_BLOG_QUERY_RESULT;
-    "*[_id == \"homePage-en\"][0].contact": HOME_CONTACT_QUERY_RESULT;
+    "*[_type == \"siteSettings\" && _id == \"siteSettings-en\"][0]": SITE_SETTINGS_QUERY_RESULT;
+    "*[_type == \"siteSettings\" && _id == \"siteSettings-en\"][0].meta": SITE_META_QUERY_RESULT;
+    "*[_type == \"siteSettings\" && _id == \"siteSettings-en\"][0].links": SITE_LINKS_QUERY_RESULT;
+    "*[_type == \"homePage\" && _id == \"homePage-en\"][0].hero": HOME_HERO_QUERY_RESULT;
+    "*[_type == \"homePage\" && _id == \"homePage-en\"][0].values": HOME_VALUES_QUERY_RESULT;
+    "*[_type == \"homePage\" && _id == \"homePage-en\"][0].products": HOME_PRODUCTS_QUERY_RESULT;
+    "*[_type == \"homePage\" && _id == \"homePage-en\"][0].blog": HOME_BLOG_QUERY_RESULT;
+    "*[_type == \"homePage\" && _id == \"homePage-en\"][0].contact": HOME_CONTACT_QUERY_RESULT;
     "*[_type == \"post\"] | order(date desc)[0...3]": HOME_POSTS_QUERY_RESULT;
   }
 }

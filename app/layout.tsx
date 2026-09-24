@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import localFont from "next/font/local";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
 import DisableDraftMode from "@/components/ui/DisableDraftMode";
+import type { SanityImageSource } from "@sanity/image-url";
 import { revalidateSanityTags } from "@/app/actions/revalidate-sanity";
-import { SanityLive } from "@/sanity/lib/live";
+import { urlFor } from "@/sanity/lib/image";
+import { SanityLive, sanityFetch } from "@/sanity/lib/live";
+import { SITE_META_QUERY } from "@/sanity/queries";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -27,7 +30,12 @@ const woodland = localFont({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("common.meta");
+  // stega must be off here: invisible characters must never reach <head>.
+  const { data: meta } = await sanityFetch({ query: SITE_META_QUERY, stega: false });
+  if (!meta) throw new Error('No siteSettings meta found. Run "npm run seed" in studio/.');
+  // Generated image types mark `asset` optional, so cast like SanityImage does.
+  const ogImage = meta.ogImage ? [urlFor(meta.ogImage as SanityImageSource).url()] : undefined;
+
   return {
     // Vercel exposes the production domain; fall back to localhost in dev.
     metadataBase: new URL(
@@ -35,19 +43,19 @@ export async function generateMetadata(): Promise<Metadata> {
         ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
         : "http://localhost:3000",
     ),
-    title: t("title"),
-    description: t("description"),
+    title: meta.title,
+    description: meta.description,
     openGraph: {
       type: "website",
-      title: t("title"),
-      description: t("description"),
-      images: ["/images/og-image.jpg"],
+      title: meta.title,
+      description: meta.description,
+      images: ogImage,
     },
     twitter: {
       card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
-      images: ["/images/og-image.jpg"],
+      title: meta.title,
+      description: meta.description,
+      images: ogImage,
     },
   };
 }
