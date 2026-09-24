@@ -2,7 +2,7 @@
 export function assertFound<T>(value: T, label: string): NonNullable<T> {
   if (value === null || value === undefined) {
     throw new Error(
-      `No Sanity content found for: ${label.trim()}\nHas the dataset been seeded? Run "npm run seed" in studio/.`,
+      `No Sanity content found for: ${label.trim()}\nCreate the document in the Studio (the site never invents content).`,
     );
   }
   return value as NonNullable<T>;

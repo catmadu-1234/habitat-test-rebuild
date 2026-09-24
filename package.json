@@ -13,13 +13,11 @@
     "cf:deploy": "rm -rf .next && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "prebuild": "rm -rf .next/cache/fetch-cache",
     "test": "node --test lib/*.test.ts sanity/lib/*.test.ts",
-    "typegen": "npm --prefix ../studio-habitat-learn-test run typegen",
-    "seed": "npm --prefix ../studio-habitat-learn-test run seed"
+    "typegen": "npm --prefix ../studio-habitat-learn-test run typegen"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",
     "next": "16.3.6",
-    "next-intl": "^4.14.6",
     "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"

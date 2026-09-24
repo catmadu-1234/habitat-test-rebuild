@@ -7,9 +7,9 @@ test("returns the value when present", () => {
   assert.equal(assertFound(value, "q"), value);
 });
 
-test("throws a seed hint for null and undefined", () => {
-  assert.throws(() => assertFound(null, "*[_id == 'a'][0]"), /seed/i);
-  assert.throws(() => assertFound(undefined, "q"), /seed/i);
+test("throws a Studio hint for null and undefined", () => {
+  assert.throws(() => assertFound(null, "*[_id == 'a'][0]"), /Studio/);
+  assert.throws(() => assertFound(undefined, "q"), /Studio/);
 });
 
 test("treats empty string, 0 and false as real content", () => {

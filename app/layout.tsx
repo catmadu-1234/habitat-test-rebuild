@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import localFont from "next/font/local";
-import { getLocale } from "next-intl/server";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import Footer from "@/components/layout/Footer";
@@ -32,7 +31,7 @@ const woodland = localFont({
 export async function generateMetadata(): Promise<Metadata> {
   // stega must be off here: invisible characters must never reach <head>.
   const { data: meta } = await sanityFetch({ query: SITE_META_QUERY, stega: false });
-  if (!meta) throw new Error('No siteSettings meta found. Run "npm run seed" in studio/.');
+  if (!meta) throw new Error("No siteSettings meta found. Create the document in the Studio.");
   // Generated image types mark `asset` optional, so cast like SanityImage does.
   const ogImage = meta.ogImage ? [urlFor(meta.ogImage as SanityImageSource).url()] : undefined;
 
@@ -61,11 +60,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
   const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang={locale} className={`${manrope.variable} ${woodland.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${woodland.variable}`}>
       <body className="bg-paper font-body text-body text-brand-purple/88 antialiased">
         <Nav />
         <main>{children}</main>
