@@ -12,7 +12,7 @@ export default function DisableDraftMode() {
     // eslint-disable-next-line @next/next/no-html-link-for-pages
     <a
       href="/api/draft-mode/disable"
-      className="fixed bottom-4 right-4 z-[999] rounded-button bg-brand-purple px-3 py-2 text-button text-paper shadow-button"
+      className="fixed bottom-4 end-4 z-[999] rounded-button bg-brand-purple px-3 py-2 text-button text-paper shadow-button"
     >
       Disable Draft Mode
     </a>

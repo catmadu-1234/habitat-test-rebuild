@@ -62,7 +62,7 @@ export default async function Blog({ locale }: { locale: string }) {
           aria-label={blog.nextPage}
           className="m-px flex items-center justify-center rounded-pill border border-brand-purple/16 px-3 py-2.5 text-brand-purple shadow-button backdrop-blur-[10px] transition-colors hover:border-paper/8 hover:bg-brand-purple/88 hover:text-paper md:px-4 md:py-3"
         >
-          <ArrowLargeIcon className="h-5 w-5 md:h-6 md:w-6" />
+          <ArrowLargeIcon className="h-5 w-5 md:h-6 md:w-6 rtl:-scale-x-100" />
         </a>
       </div>
     </Section>

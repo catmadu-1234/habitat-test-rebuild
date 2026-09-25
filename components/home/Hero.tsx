@@ -20,7 +20,7 @@ export default async function Hero({ locale }: { locale: string }) {
     <Section top="lg">
       {/* Headline */}
       <div className="mx-auto mb-8 flex max-w-headline flex-col items-center gap-4 text-center text-brand-purple md:mb-12 md:gap-6">
-        <SectionLabel className="ml-[5px]">{hero.label}</SectionLabel>
+        <SectionLabel className="ms-[5px]">{hero.label}</SectionLabel>
         <h1 className="font-heading text-h1">{hero.title}</h1>
         <p className="mb-2.5 max-w-[450px] text-brand-purple/64">{hero.description}</p>
         <div className="flex items-center justify-center gap-2.5">
@@ -39,7 +39,7 @@ export default async function Hero({ locale }: { locale: string }) {
           {(hero.avatars ?? []).map((avatar, index) => (
             <div
               key={avatar._key}
-              className={`relative h-10 w-10 flex-none overflow-hidden rounded-full border-2 border-paper md:h-12 md:w-12 ${index > 0 ? "-ml-4" : ""}`}
+              className={`relative h-10 w-10 flex-none overflow-hidden rounded-full border-2 border-paper md:h-12 md:w-12 ${index > 0 ? "-ms-4" : ""}`}
             >
               <SanityImage
                 image={avatar}

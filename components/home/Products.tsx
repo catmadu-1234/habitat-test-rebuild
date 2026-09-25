@@ -50,7 +50,7 @@ export default async function Products({ locale }: { locale: string }) {
                   href={href}
                   className="relative flex items-center gap-2.5 text-button font-medium text-brand-purple transition-colors hover:text-brand-purple/88"
                 >
-                  <ArrowIcon className="h-3 w-3 md:h-4 md:w-4" />
+                  <ArrowIcon className="h-3 w-3 md:h-4 md:w-4 rtl:-scale-x-100" />
                   <span>{products.learnMore}</span>
                   <span className="absolute inset-x-0 bottom-0 h-px bg-brand-purple" />
                 </a>

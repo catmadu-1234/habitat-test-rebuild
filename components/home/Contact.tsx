@@ -34,16 +34,16 @@ export default async function Contact({ locale }: { locale: string }) {
             </div>
 
             <div className="flex w-full flex-col items-start gap-6 border-t border-brand-purple/16 pt-6 md:gap-8 md:pt-8">
-              <SectionLabel className="ml-[5px]">{contact.partnersLabel}</SectionLabel>
+              <SectionLabel className="ms-[5px]">{contact.partnersLabel}</SectionLabel>
               <div className="relative flex h-[33px] w-full items-center overflow-hidden md:h-[47px]">
-                <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-14 bg-gradient-to-r from-paper to-transparent md:w-20" />
-                <div className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-paper to-transparent md:w-20" />
-                <div className="flex w-max animate-marquee">
+                <div className="pointer-events-none absolute inset-y-0 start-0 z-[1] w-14 bg-gradient-to-r from-paper to-transparent md:w-20 rtl:bg-gradient-to-l" />
+                <div className="pointer-events-none absolute inset-y-0 end-0 z-[1] w-14 bg-gradient-to-l from-paper to-transparent md:w-20 rtl:bg-gradient-to-r" />
+                <div className="flex w-max animate-marquee rtl:[animation-direction:reverse]">
                   {[0, 1].map((copy) => (
                     <ul
                       key={copy}
                       aria-hidden={copy === 1}
-                      className="flex shrink-0 items-center gap-20 pr-20"
+                      className="flex shrink-0 items-center gap-20 pe-20"
                     >
                       {(contact.partners ?? []).map((partner) => (
                         <li key={partner._key}>
@@ -66,7 +66,7 @@ export default async function Contact({ locale }: { locale: string }) {
           {/* Right: form.
               TODO: static placeholder. Wire up submission (Webflow form + Turnstile on the
               live site) once the backend is decided. The button links to the sign-up flow. */}
-          <div className="flex flex-col items-start gap-4 pt-3.5 md:gap-5 md:pt-0 lg:w-1/2 lg:pb-5 lg:pl-content">
+          <div className="flex flex-col items-start gap-4 pt-3.5 md:gap-5 md:pt-0 lg:w-1/2 lg:pb-5 lg:ps-content">
             <div className="flex w-full flex-col gap-2.5">
               <Label htmlFor="contact-name" className="text-brand-purple/64">
                 {contact.form.nameLabel}

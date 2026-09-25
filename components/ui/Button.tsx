@@ -37,9 +37,9 @@ export default function Button({
         </span>
       </span>
       {withArrow && (
-        <span className="relative z-[1] -mr-1 flex h-3 w-3 items-center justify-end overflow-hidden md:h-4 md:w-4">
-          <ArrowIcon className="absolute inset-0 h-full w-full transition-transform duration-300 group-hover:translate-x-full" />
-          <ArrowIcon className="absolute inset-0 h-full w-full -translate-x-full transition-transform duration-300 group-hover:translate-x-0" />
+        <span className="relative z-[1] -me-1 flex h-3 w-3 items-center justify-end overflow-hidden md:h-4 md:w-4">
+          <ArrowIcon className="absolute inset-0 h-full w-full transition-transform duration-300 group-hover:translate-x-full rtl:-scale-x-100 rtl:group-hover:-translate-x-full" />
+          <ArrowIcon className="absolute inset-0 h-full w-full -translate-x-full transition-transform duration-300 group-hover:translate-x-0 rtl:translate-x-full rtl:-scale-x-100" />
         </span>
       )}
     </a>

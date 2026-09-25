@@ -38,7 +38,7 @@ export default function SectionHeader({
         className,
       )}
     >
-      <SectionLabel className="ml-[5px]">{label}</SectionLabel>
+      <SectionLabel className="ms-[5px]">{label}</SectionLabel>
       <h2
         className={cn(
           "font-heading text-brand-purple",

@@ -116,7 +116,7 @@ export default async function Nav({ locale }: { locale: string }) {
                     <div className="col-span-3 grid grid-cols-3 gap-4">
                       {orgColumns.map((column) => (
                         <div key={column.key} className="flex flex-col items-start gap-8">
-                          <SectionLabel className="ml-[5px]">{column.label}</SectionLabel>
+                          <SectionLabel className="ms-[5px]">{column.label}</SectionLabel>
                           <div className="flex flex-col items-start gap-4">
                             {column.items.map((item) => (
                               <a
@@ -164,7 +164,7 @@ export default async function Nav({ locale }: { locale: string }) {
                   <div className="absolute inset-0 bg-paper" />
                   <div className="relative mx-auto flex max-w-page justify-between gap-6 px-8">
                     <div className="flex flex-col items-start gap-8">
-                      <SectionLabel className="ml-[5px]">{nav.students.columnLabel}</SectionLabel>
+                      <SectionLabel className="ms-[5px]">{nav.students.columnLabel}</SectionLabel>
                       <div className="flex flex-col items-start">
                         {studentItems.map((item) => (
                           <a key={item.key} href={item.href} className="text-brand-purple/88">

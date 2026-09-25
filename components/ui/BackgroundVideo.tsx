@@ -49,7 +49,7 @@ export default function BackgroundVideo({
         type="button"
         onClick={toggle}
         aria-label={playing ? pauseLabel : playLabel}
-        className={`absolute bottom-4 right-4 flex h-8 w-8 items-center justify-center rounded-pill border border-brand-purple/16 shadow-button backdrop-blur-[8px] transition-colors md:bottom-6 md:right-6 md:h-[34px] md:w-[38px] ${
+        className={`absolute bottom-4 end-4 flex h-8 w-8 items-center justify-center rounded-pill border border-brand-purple/16 shadow-button backdrop-blur-[8px] transition-colors md:bottom-6 md:end-6 md:h-[34px] md:w-[38px] ${
           playing ? "bg-brand-purple/8 text-paper" : "bg-paper text-brand-purple"
         }`}
       >
