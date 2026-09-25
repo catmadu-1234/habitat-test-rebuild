@@ -49,8 +49,16 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
   const status = await deps.readStatus();
   const startedMs = status.runStartedAt ? Date.parse(status.runStartedAt) : 0;
   const lockIsFresh = status.running && deps.now().getTime() - startedMs < STALE_LOCK_MS;
-  if (lockIsFresh || !(await deps.tryStart(status.rev, deps.now().toISOString()))) {
-    return { skipped: "already-running", pushed: [], stored: [] };
+  const alreadyRunning = { skipped: "already-running" as const, pushed: [], stored: [] };
+  if (lockIsFresh) return alreadyRunning;
+  if (!(await deps.tryStart(status.rev, deps.now().toISOString()))) {
+    // The revision may have moved because of an unrelated write: look again once before giving up.
+    const fresh = await deps.readStatus();
+    const freshMs = fresh.runStartedAt ? Date.parse(fresh.runStartedAt) : 0;
+    const freshLock = fresh.running && deps.now().getTime() - freshMs < STALE_LOCK_MS;
+    if (freshLock || !(await deps.tryStart(fresh.rev, deps.now().toISOString()))) {
+      return alreadyRunning;
+    }
   }
 
   const pushed: string[] = [];
@@ -80,15 +88,24 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
     if (pushed.length > 0) await deps.saveDocuments(documents);
 
     // 3. Machine-translate the changed files for the languages that are switched on.
-    if (changedFileIds.length > 0 && locales.length > 0) {
+    // Also covers files a newly switched-on language has not stored yet (repeating is cheap and idempotent).
+    const sourceIds = new Set(sources.map((source) => source.id));
+    const fileIds = new Set(changedFileIds);
+    for (const [sourceId, { hash, fileId }] of Object.entries(documents)) {
+      if (!sourceIds.has(sourceId)) continue;
+      if (locales.some((l) => status.stored[storeKey(l.code, sourceId)] !== hash))
+        fileIds.add(fileId);
+    }
+    if (fileIds.size > 0 && locales.length > 0) {
       await deps.crowdin.preTranslate({
-        fileIds: changedFileIds,
+        fileIds: [...fileIds],
         languageIds: locales.map((l) => l.crowdinId),
       });
     }
 
     // 4. Pull whatever is already complete and not yet stored for the current hash.
     for (const [sourceId, { hash, fileId }] of Object.entries(documents)) {
+      if (!sourceIds.has(sourceId)) continue;
       if (locales.every((l) => status.stored[storeKey(l.code, sourceId)] === hash)) continue;
       const progress = await deps.crowdin.getProgress(fileId);
       for (const locale of locales) {
@@ -105,6 +122,9 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
     }
 
     if (storedKeys.length > 0) await deps.revalidate();
+    for (const sourceId of Object.keys(documents)) {
+      if (!sourceIds.has(sourceId)) delete documents[sourceId];
+    }
     await deps.finish({
       documents,
       lastSyncAt: deps.now().toISOString(),
@@ -115,10 +135,14 @@ export async function runSync(deps: SyncDeps): Promise<SyncResult> {
   } catch (error) {
     // Revert to the previous documents so the next press pushes and pre-translates again; the site keeps
     // serving whatever translations were already stored.
-    await deps.finish({
-      documents: status.documents,
-      lastError: error instanceof Error ? error.message : String(error),
-    });
+    try {
+      await deps.finish({
+        documents: status.documents,
+        lastError: error instanceof Error ? error.message : String(error),
+      });
+    } catch {
+      // Keep the original error; a failed status write must not hide it.
+    }
     throw error;
   }
 }

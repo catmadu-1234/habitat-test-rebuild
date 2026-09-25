@@ -117,6 +117,10 @@ test("skips documents whose hash is unchanged and does not pre-translate when no
         "homePage-en": { hash: await homeHash(), fileId: 7 },
         "siteSettings-en": { hash: await hashStrings(extractStrings(settings)), fileId: 8 },
       },
+      stored: {
+        [storeKey("ar", "homePage-en")]: await homeHash(),
+        [storeKey("ar", "siteSettings-en")]: await hashStrings(extractStrings(settings)),
+      },
     },
   });
   const result = await runSync(deps);
@@ -294,4 +298,84 @@ test("computePending counts documents whose hash differs from the last push (or 
   assert.equal(await computePending(deps), 1);
   const fresh = harness();
   assert.equal(await computePending(fresh.deps), 2);
+});
+
+test("FIX: a language switched on later is pre-translated for unchanged files it has not stored", async () => {
+  const hash = await homeHash();
+  const { deps, log } = harness({
+    locales: [ar, es],
+    status: {
+      documents: { "homePage-en": { hash, fileId: 7 } },
+      stored: { [storeKey("ar", "homePage-en")]: hash },
+    },
+    docs: [{ id: "homePage-en", doc: home }],
+    progress: { 7: [{ languageId: "es", translationProgress: 10 }] },
+  });
+  await runSync(deps);
+  const pre = log.find((e) => e.name === "preTranslate")!.args as {
+    fileIds: number[];
+    languageIds: string[];
+  };
+  assert.deepEqual(pre.fileIds, [7]);
+  assert.deepEqual(pre.languageIds, ["ar", "es"]);
+  assert.ok(!log.some((e) => e.name === "upsertFile"));
+});
+
+test("FIX: no pre-translation when every active language is already stored for unchanged files", async () => {
+  const hash = await homeHash();
+  const { deps, names } = harness({
+    status: {
+      documents: { "homePage-en": { hash, fileId: 7 } },
+      stored: { [storeKey("ar", "homePage-en")]: hash },
+    },
+    docs: [{ id: "homePage-en", doc: home }],
+  });
+  await runSync(deps);
+  assert.ok(!names().includes("preTranslate"));
+});
+
+test("FIX: documents that dropped out of the sources are not pulled and are removed from the saved map", async () => {
+  const hash = await homeHash();
+  const { deps, log } = harness({
+    status: {
+      documents: {
+        "homePage-en": { hash, fileId: 7 },
+        "post-old": { hash: "x", fileId: 55 },
+      },
+    },
+    docs: [{ id: "homePage-en", doc: home }],
+    progress: { 7: [{ languageId: "ar", translationProgress: 100 }] },
+  });
+  const progressCalls: number[] = [];
+  const original = deps.crowdin.getProgress;
+  deps.crowdin.getProgress = async (fileId) => {
+    progressCalls.push(fileId);
+    return original(fileId);
+  };
+  await runSync(deps);
+  assert.ok(!progressCalls.includes(55));
+  const finish = log.filter((e) => e.name === "finish").pop()!.args as {
+    documents: Record<string, unknown>;
+  };
+  assert.deepEqual(Object.keys(finish.documents), ["homePage-en"]);
+});
+
+test("FIX: a failing finish() in the error path does not hide the original error", async () => {
+  const { deps } = harness({ failPreTranslate: true });
+  deps.finish = async () => {
+    throw new Error("finish down");
+  };
+  await assert.rejects(runSync(deps), /mt down/);
+});
+
+test("FIX: a lock lost only because the revision moved is retried once against the fresh status", async () => {
+  const { deps, names } = harness();
+  let calls = 0;
+  deps.tryStart = async () => {
+    calls += 1;
+    return calls > 1;
+  };
+  await runSync(deps);
+  assert.equal(calls, 2);
+  assert.ok(names().includes("upsertFile"));
 });
