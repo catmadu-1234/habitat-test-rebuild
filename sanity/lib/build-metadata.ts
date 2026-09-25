@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import type { SanityImageSource } from "@sanity/image-url";
+import { statusFor } from "@/lib/languages";
+import { LOCALES, DEFAULT_LOCALE, localePath } from "@/lib/locales";
+import { SITE_URL } from "@/lib/site-url";
 import { SANITY_CACHE_TAG } from "@/sanity/lib/cache-tag";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
+import { getLanguages } from "@/sanity/lib/languages";
 import { localize } from "@/sanity/lib/localize";
 import { SITE_META_QUERY } from "@/sanity/queries";
 
@@ -20,13 +24,23 @@ export async function buildMetadata(locale: string): Promise<Metadata> {
     ? [urlFor(meta.ogImage as SanityImageSource).url()]
     : undefined;
 
+  const rows = await getLanguages();
+  const live = LOCALES.filter((entry) => statusFor(rows, entry.code) === "live");
+  const alternates = {
+    canonical: localePath(locale),
+    languages: {
+      "x-default": localePath(DEFAULT_LOCALE),
+      ...Object.fromEntries(live.map((entry) => [entry.htmlLang, localePath(entry.code)])),
+    },
+  };
+  // Machine-translated previews must not be indexed until someone flips them to Live.
+  const robots =
+    statusFor(rows, locale) === "preview" ? { index: false, follow: false } : undefined;
+
   return {
-    // Vercel exposes the production domain; fall back to localhost in dev.
-    metadataBase: new URL(
-      process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : "http://localhost:3000",
-    ),
+    metadataBase: new URL(SITE_URL),
+    alternates,
+    robots,
     title: meta.title,
     description: meta.description,
     openGraph: {
