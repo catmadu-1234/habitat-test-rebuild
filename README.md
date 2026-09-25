@@ -42,6 +42,13 @@ Environment for this app (`.env.local` locally, `.dev.vars` for `npm run cf:prev
 | `SANITY_API_READ_TOKEN`         | **Viewer** (read-only) token. Needed for Draft Mode/Presentation. In Draft Mode it is also sent to the browser (so drafts update live), which is why it must be Viewer-only.                                       |
 | `SANITY_REVALIDATE_SECRET`      | Secret shared with the Sanity publish webhook (see below).                                                                                                                                                         |
 | `NEXT_PUBLIC_SANITY_STUDIO_URL` | Deployed Studio URL, used for click-to-edit links. It is inlined at **build** time, so set it in `.env.local` before `npm run cf:build`/`cf:deploy`, not as a Workers secret. Defaults to `http://localhost:3333`. |
+| `CROWDIN_API_TOKEN`             | Crowdin personal access token (project read/write).                                                                                                                                                                |
+| `CROWDIN_PROJECT_ID`            | Crowdin project id (Tools > API).                                                                                                                                                                                  |
+| `CROWDIN_WEBHOOK_SECRET`        | Shared secret sent by Crowdin in the `X-Webhook-Secret` header.                                                                                                                                                    |
+| `CROWDIN_MT_ENGINE_ID`          | Machine translation engine id (`node --env-file=.env.local scripts/crowdin-info.mjs` lists them).                                                                                                                  |
+| `CROWDIN_PRETRANSLATE_METHOD`   | Optional: `mt` (default), `tm` or `ai`.                                                                                                                                                                            |
+| `SANITY_API_WRITE_TOKEN`        | Sanity **Editor** token; the sync writes translations and status with it.                                                                                                                                          |
+| `NEXT_PUBLIC_SITE_URL`          | Public origin, used for hreflang and the sitemap. Inlined at build time.                                                                                                                                           |
 
 Set the secrets on Cloudflare with `npx wrangler secret put SANITY_API_READ_TOKEN` and `npx wrangler secret put SANITY_REVALIDATE_SECRET`. Add each site origin to
 Sanity CORS with credentials (`npx sanity cors add <origin> --credentials` in the Studio folder).
@@ -121,9 +128,19 @@ Type and spacing tokens switch to their mobile values below 768px automatically.
 
 ## Languages
 
-The site is English only. Content documents are `homePage-en` and `siteSettings-en`, so a second language is a
-new pair of documents plus locale routing, not a migration. Crowdin and `next-intl` were removed when copy moved
-to Sanity.
+English is authored in Sanity; other languages are machine-translated through Crowdin. Workflow and rules are in
+`CLAUDE.md` ("Languages (Crowdin)"). Setup:
+
+- Set the environment variables above (Workers secrets in production).
+- Webhooks (three), in addition to the publish webhook above:
+  - Sanity "Translate all changes" -> `POST /api/crowdin/sync`, dataset `production`, trigger on update, filter
+    exactly `_type == "translationStatus" && delta::changedAny(requestedAt)` (the sync rewrites that document several
+    times; a plain type filter would loop), same secret as the revalidate webhook.
+  - Sanity "Translation pending count" -> `POST /api/crowdin/changed`, trigger create/update/delete, filter
+    `_type in ["homePage", "siteSettings", "post"]`.
+  - Crowdin (Project > Tools > Webhooks) -> `POST /api/crowdin`, events `file.translated` and `file.approved`,
+    content type JSON, custom header `X-Webhook-Secret` with the value of `CROWDIN_WEBHOOK_SECRET`.
+- Seed the language settings once from the Studio repo (see its README).
 
 ## Editing in Onlook
 

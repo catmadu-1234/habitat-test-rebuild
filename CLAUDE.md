@@ -7,11 +7,14 @@ must stay easy to edit in Onlook (layout and classes) and in Sanity (copy, image
 
 1. **Tailwind classes only.** Style with utility classes directly on JSX elements. No CSS modules, CSS-in-JS,
    `@apply`, inline `style=`, or extra UI libraries (no shadcn, MUI, clsx, tailwind-merge). Onlook edits the
-   classes in the JSX, so keep markup simple and readable.
+   classes in the JSX, so keep markup simple and readable. Use logical direction utilities (`ms/me/ps/pe/start/end`,
+   `text-start/end`); physical ones only with an `rtl:` variant on the same line (`npm test` enforces this).
 2. **No hard-coded user-facing text.** Every visible string and every `alt`/`aria-label` comes from Sanity:
    the `homePage-en` document (sections) or `siteSettings-en` (nav, footer, meta, links), read with the
-   queries in `sanity/queries.ts`. The one exception is the editor-only "Disable Draft Mode" button.
-3. **One component per homepage section** in `components/home/`, assembled in `app/page.tsx`.
+   queries in `sanity/queries.ts`. The one exception is the editor-only "Disable Draft Mode" button. Language names in the switcher and its
+   `aria-label` are Sanity content too (`siteSettings-en.languages`, `nav.languageMenu`).
+3. **One component per homepage section** in `components/home/`, assembled in `components/home/HomePage.tsx`
+   (rendered by `app/(en)/page.tsx` and `app/[locale]/page.tsx`).
    Shared chrome (Nav, Footer) goes in `components/layout/`. Small reusable pieces go in `components/ui/`.
 4. **Local assets for static UI only.** Icons, fonts, favicons, the hero and nav videos and their posters live
    in `public/`. Editor-managed images come from Sanity through `<SanityImage>` (`next/image` under the hood).
@@ -43,6 +46,8 @@ must stay easy to edit in Onlook (layout and classes) and in Sanity (copy, image
   `` `pt-${x}` ``), or Tailwind can't see them.
 - Run `npm run format` (Prettier + Tailwind class sorting), `npm run lint` and `npm run build` before committing.
   `npm run build` must pass with no errors.
+- New section checklist: schema fields in the Studio repo, starter content written to Sanity (the site never invents
+  content), `npm run typegen`, `npm run translations:check`, `npm test`, `npm run build`.
 
 ## Working with Sanity
 
@@ -54,8 +59,35 @@ must stay easy to edit in Onlook (layout and classes) and in Sanity (copy, image
 - Onlook edits classes only. Change copy, alt text, images and links in Sanity, not in the JSX.
 - Builds clear `.next/cache/fetch-cache` (`prebuild`) because Sanity fetches are cached until invalidated; the
   `cf:*` scripts remove `.next` first for the same reason.
-- Adding a language means new `homePage-<code>` / `siteSettings-<code>` documents plus locale routing. That is
-  real work (see the design spec in `docs/superpowers/specs/`), not a config change.
+
+## Languages (Crowdin)
+
+English is authored in Sanity and lives at `/`; other languages live at `/<code>` (`lib/locales.ts` lists them).
+Editors only edit English. A **Translate all changes** button (Studio > Translations tab) sends changed strings to
+Crowdin, which machine-translates them; finished translations are stored as `translation-<code>-<sourceId>`
+documents and merged over the English data at render time (`sanity/lib/localize.ts`).
+
+- Every homepage/nav/footer fetch goes through `fetchLocalized(query, locale, sourceId, path)`; blog posts through
+  `localizeDocs`. Never fetch copy with `fetchRequired` in a component that renders in other languages.
+- New copy fields are translated automatically. After adding or changing a field (or seeding content for a new
+  section) run `npm run translations:check`. It compares field shapes: list item `_key` segments collapse to `[]`
+  (e.g. `contact.partners[].alt`), so editors adding list items do not trip it; only new or removed field paths do.
+  If it reports new keys, review them (they go to translators), then run `npm run translations:snapshot` and commit
+  the diff. Strings that are not copy (ids, enums, URLs) are skipped by rule in `lib/crowdin/extract.ts`; add a rule
+  and a test there if a new non-copy string gets picked up.
+- Rich text (Portable Text) is not supported by the extractor and throws on purpose.
+- A language is `off`, `preview` (reachable by URL, hidden, `noindex`) or `live` (in the switcher, indexed), set per
+  language in Studio > Site settings > Languages. No deploy is needed to change it.
+- `getLanguages()` in `sanity/lib/languages.ts` uses `sanityFetch` (needs a request context). Build-time code
+  (`generateStaticParams` in `app/[locale]/layout.tsx`, `app/sitemap.ts`) reads languages with the plain client,
+  because `sanityFetch` calls `draftMode()`, which is unavailable at build.
+- Dev tip: after changing a language's status in Sanity, the first `npm run build` may still render the old status
+  (fetch cache). Build twice when verifying; production revalidates through the publish webhook.
+- Adding a language: add it to `lib/locales.ts` (URL code, Crowdin id, `<html lang>`, direction) and to
+  `schemaTypes/shared/language-codes.ts` in the Studio repo, add the language in Crowdin, then add an entry in
+  Site settings > Languages. Right-to-left languages need `dir: "rtl"`.
+- Secrets: `CROWDIN_API_TOKEN`, `CROWDIN_PROJECT_ID`, `CROWDIN_WEBHOOK_SECRET`, `SANITY_API_WRITE_TOKEN`,
+  `CROWDIN_MT_ENGINE_ID` (see README). Never commit them.
 
 ## Verifying visual changes
 
