@@ -3,6 +3,7 @@ import { stegaClean } from "next-sanity";
 import Button from "@/components/ui/Button";
 import SanityImage from "@/components/ui/SanityImage";
 import SectionLabel from "@/components/ui/SectionLabel";
+import LanguageSwitcher from "./LanguageSwitcher";
 import PromoTile from "./PromoTile";
 import { CloseIcon, MenuIcon } from "@/components/ui/Icons";
 import { getSiteSettings } from "@/sanity/lib/site";
@@ -204,9 +205,10 @@ export default async function Nav({ locale }: { locale: string }) {
             </a>
           </nav>
 
-          <Button href={links.apply} className="hidden lg:flex">
-            {nav.getStarted}
-          </Button>
+          <div className="hidden items-center gap-2 lg:flex">
+            <LanguageSwitcher locale={locale} label={nav.languageMenu} variant="dropdown" />
+            <Button href={links.apply}>{nav.getStarted}</Button>
+          </div>
         </div>
 
         {/* Mobile / tablet menu panel */}
@@ -223,6 +225,7 @@ export default async function Nav({ locale }: { locale: string }) {
                 </div>
               ))}
             </div>
+            <LanguageSwitcher locale={locale} label={nav.languageMenu} variant="list" />
             <PromoTile
               className="h-[245px]"
               media={
