@@ -13,6 +13,8 @@
     "cf:deploy": "rm -rf .next && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "prebuild": "rm -rf .next/cache/fetch-cache",
     "test": "node --test lib/*.test.ts lib/crowdin/*.test.ts sanity/lib/*.test.ts",
+    "translations:check": "node scripts/translations-keys.ts",
+    "translations:snapshot": "node scripts/translations-keys.ts --write",
     "typegen": "npm --prefix ../studio-habitat-learn-test run typegen"
   },
   "dependencies": {
