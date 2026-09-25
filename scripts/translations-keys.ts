@@ -22,9 +22,19 @@ const [singletons, posts] = await Promise.all([
   query<{ _id: string }[]>(SOURCE_POSTS_QUERY),
 ]);
 
+// Snapshot field shapes, not content instances: `[<_key>]` segments become `[]`, so adding a list item in Sanity does not trip the check.
+const shapes = (docs: object[]) =>
+  [
+    ...new Set(
+      docs.flatMap((doc) =>
+        Object.keys(extractStrings(doc)).map((key) => key.replace(/\[[^\]]*\]/g, "[]")),
+      ),
+    ),
+  ].sort();
+
 const current: Record<string, string[]> = {};
-for (const doc of singletons) current[doc._id] = Object.keys(extractStrings(doc)).sort();
-current.post = [...new Set(posts.flatMap((post) => Object.keys(extractStrings(post))))].sort();
+for (const doc of singletons) current[doc._id] = shapes([doc]);
+current.post = shapes(posts);
 
 if (process.argv.includes("--write")) {
   writeFileSync(SNAPSHOT, `${JSON.stringify(current, null, 2)}\n`);
