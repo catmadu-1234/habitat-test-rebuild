@@ -14,8 +14,8 @@ const navLink =
 const dropdownPanel =
   "invisible fixed inset-x-0 top-[70px] z-10 pt-5 opacity-0 transition-opacity duration-200 group-hover/dd:visible group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:opacity-100";
 
-export default async function Nav() {
-  const settings = await getSiteSettings("en");
+export default async function Nav({ locale }: { locale: string }) {
+  const settings = await getSiteSettings(locale);
   const { nav } = settings;
   const links = stegaClean(settings.links);
   const { products, resources, start } = nav.organizations.columns;

@@ -1,17 +1,5 @@
-import Blog from "@/components/home/Blog";
-import Contact from "@/components/home/Contact";
-import Hero from "@/components/home/Hero";
-import Products from "@/components/home/Products";
-import Values from "@/components/home/Values";
+import HomePage from "@/components/home/HomePage";
 
-export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <Values />
-      <Products />
-      <Blog />
-      <Contact />
-    </>
-  );
+export default function EnglishHomePage() {
+  return <HomePage locale="en" />;
 }

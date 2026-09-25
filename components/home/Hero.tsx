@@ -6,12 +6,15 @@ import SanityImage from "@/components/ui/SanityImage";
 import Section from "@/components/ui/Section";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { CheckCircleIcon, MailIcon } from "@/components/ui/Icons";
-import { fetchRequired } from "@/sanity/lib/fetch";
+import { fetchLocalized } from "@/sanity/lib/fetch";
 import { getLinks } from "@/sanity/lib/site";
 import { HOME_HERO_QUERY } from "@/sanity/queries";
 
-export default async function Hero() {
-  const [hero, links] = await Promise.all([fetchRequired(HOME_HERO_QUERY), getLinks()]);
+export default async function Hero({ locale }: { locale: string }) {
+  const [hero, links] = await Promise.all([
+    fetchLocalized(HOME_HERO_QUERY, locale, "homePage-en", "hero"),
+    getLinks(),
+  ]);
 
   return (
     <Section top="lg">

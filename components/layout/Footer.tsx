@@ -3,8 +3,8 @@ import { stegaClean } from "next-sanity";
 import Label from "@/components/ui/Label";
 import { getSiteSettings } from "@/sanity/lib/site";
 
-export default async function Footer() {
-  const settings = await getSiteSettings("en");
+export default async function Footer({ locale }: { locale: string }) {
+  const settings = await getSiteSettings(locale);
   const { footer } = settings;
   const links = stegaClean(settings.links);
   const { login, company, resources, more } = footer.columns;

@@ -3,15 +3,18 @@ import Label from "@/components/ui/Label";
 import SanityImage from "@/components/ui/SanityImage";
 import Section from "@/components/ui/Section";
 import SectionLabel from "@/components/ui/SectionLabel";
-import { fetchRequired } from "@/sanity/lib/fetch";
+import { fetchLocalized } from "@/sanity/lib/fetch";
 import { getLinks } from "@/sanity/lib/site";
 import { HOME_CONTACT_QUERY } from "@/sanity/queries";
 
 const fieldStyles =
   "w-full rounded-lg border border-brand-purple/8 bg-brand-purple/8 px-3 py-2.5 md:px-4 md:py-3 text-brand-purple outline-none placeholder:text-brand-purple/48 focus:border-brand-purple/48 focus:bg-brand-purple/16";
 
-export default async function Contact() {
-  const [contact, links] = await Promise.all([fetchRequired(HOME_CONTACT_QUERY), getLinks()]);
+export default async function Contact({ locale }: { locale: string }) {
+  const [contact, links] = await Promise.all([
+    fetchLocalized(HOME_CONTACT_QUERY, locale, "homePage-en", "contact"),
+    getLinks(),
+  ]);
 
   return (
     <Section

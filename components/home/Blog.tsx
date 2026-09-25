@@ -5,16 +5,20 @@ import Section from "@/components/ui/Section";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { ArrowLargeIcon } from "@/components/ui/Icons";
 import { formatPostDate } from "@/lib/format-post-date";
-import { fetchRequired } from "@/sanity/lib/fetch";
+import { getLocale } from "@/lib/locales";
+import { fetchLocalized, fetchRequired } from "@/sanity/lib/fetch";
+import { localizeDocs } from "@/sanity/lib/localize";
 import { getLinks } from "@/sanity/lib/site";
 import { HOME_BLOG_QUERY, HOME_POSTS_QUERY } from "@/sanity/queries";
 
-export default async function Blog() {
-  const [blog, posts, links] = await Promise.all([
-    fetchRequired(HOME_BLOG_QUERY),
+export default async function Blog({ locale }: { locale: string }) {
+  const [blog, rawPosts, links] = await Promise.all([
+    fetchLocalized(HOME_BLOG_QUERY, locale, "homePage-en", "blog"),
     fetchRequired(HOME_POSTS_QUERY),
     getLinks(),
   ]);
+  const posts = await localizeDocs(rawPosts, locale);
+  const lang = getLocale(locale)?.htmlLang;
 
   return (
     <Section top="md">
@@ -44,7 +48,7 @@ export default async function Blog() {
             <div className="flex flex-col gap-3 md:gap-4">
               <div className="flex items-center justify-between text-brand-purple/88">
                 <Label>{post.category}</Label>
-                <Label>{formatPostDate(stegaClean(post.date))}</Label>
+                <Label>{formatPostDate(stegaClean(post.date), lang)}</Label>
               </div>
               <div className="font-heading text-h6">{post.title}</div>
             </div>

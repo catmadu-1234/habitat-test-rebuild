@@ -1,11 +1,11 @@
 import SanityImage from "@/components/ui/SanityImage";
 import Section from "@/components/ui/Section";
 import SectionHeader from "@/components/ui/SectionHeader";
-import { fetchRequired } from "@/sanity/lib/fetch";
+import { fetchLocalized } from "@/sanity/lib/fetch";
 import { HOME_VALUES_QUERY } from "@/sanity/queries";
 
-export default async function Values() {
-  const values = await fetchRequired(HOME_VALUES_QUERY);
+export default async function Values({ locale }: { locale: string }) {
+  const values = await fetchLocalized(HOME_VALUES_QUERY, locale, "homePage-en", "values");
 
   return (
     <Section top="sm" bottom="md">

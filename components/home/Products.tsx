@@ -2,12 +2,15 @@ import SanityImage from "@/components/ui/SanityImage";
 import Section from "@/components/ui/Section";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { ArrowIcon } from "@/components/ui/Icons";
-import { fetchRequired } from "@/sanity/lib/fetch";
+import { fetchLocalized } from "@/sanity/lib/fetch";
 import { getLinks } from "@/sanity/lib/site";
 import { HOME_PRODUCTS_QUERY } from "@/sanity/queries";
 
-export default async function Products() {
-  const [products, links] = await Promise.all([fetchRequired(HOME_PRODUCTS_QUERY), getLinks()]);
+export default async function Products({ locale }: { locale: string }) {
+  const [products, links] = await Promise.all([
+    fetchLocalized(HOME_PRODUCTS_QUERY, locale, "homePage-en", "products"),
+    getLinks(),
+  ]);
 
   // On tablet and desktop each card sticks while scrolling and is offset from
   // the previous one (`offset`), giving the staggered "stacking" effect.

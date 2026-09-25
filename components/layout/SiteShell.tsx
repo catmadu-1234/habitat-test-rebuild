@@ -26,9 +26,9 @@ export default async function SiteShell({
       className={`${manrope.variable} ${woodland.variable}`}
     >
       <body className="bg-paper font-body text-body text-brand-purple/88 antialiased">
-        <Nav />
+        <Nav locale={locale} />
         <main>{children}</main>
-        <Footer />
+        <Footer locale={locale} />
         <SanityLive action={revalidateSanityTags} />
         {isDraftMode && (
           <>

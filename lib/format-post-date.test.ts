@@ -23,3 +23,10 @@ test("returns an empty string for a missing or unparsable date (half-filled draf
   assert.equal(formatPostDate(""), "");
   assert.equal(formatPostDate("not-a-date"), "");
 });
+
+test("formats in the requested language and keeps English as the default", () => {
+  assert.equal(formatPostDate("2026-08-01", "en-US"), "Aug 2026");
+  const japanese = formatPostDate("2026-08-01", "ja");
+  assert.notEqual(japanese, "Aug 2026");
+  assert.ok(japanese.includes("2026"));
+});
