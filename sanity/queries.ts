@@ -31,3 +31,12 @@ export const HOME_CONTACT_QUERY = defineQuery(
 export const HOME_POSTS_QUERY = defineQuery(
   `*[_type == "post" && defined(date) && defined(url) && defined(image.asset)] | order(date desc)[0...3]`,
 );
+
+export const SITE_LANGUAGES_QUERY = defineQuery(
+  `*[_type == "siteSettings" && _id == "siteSettings-en"][0].languages`,
+);
+
+// A translation document holds the translated strings for one source document as a JSON string.
+export const TRANSLATION_JSON_QUERY = defineQuery(
+  `*[_type == "translation" && _id == $id][0].json`,
+);

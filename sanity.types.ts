@@ -37,6 +37,52 @@ export type Form = {
   submit: string;
 };
 
+export type LanguageEntry = {
+  _type: "languageEntry";
+  code: "en" | "zh-cn" | "zh-tw" | "es" | "fr" | "de" | "ja" | "ko" | "pt-br" | "it" | "ar" | "hi" | "nl" | "sv" | "da" | "nb" | "fi" | "ro";
+  nativeName: string;
+  status: "off" | "preview" | "live";
+};
+
+export type TranslationStatus = {
+  _id: string;
+  _type: "translationStatus";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  requestedAt?: string;
+  running?: boolean;
+  runStartedAt?: string;
+  lastSyncAt?: string;
+  lastError?: string;
+  pendingCount?: number;
+  documents?: Array<{
+    hash?: string;
+    fileId?: number;
+    _type: "syncedDocument";
+    _key: string;
+  }>;
+  stored?: Array<{
+    hash?: string;
+    storedAt?: string;
+    _type: "storedTranslation";
+    _key: string;
+  }>;
+};
+
+export type Translation = {
+  _id: string;
+  _type: "translation";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  language?: string;
+  source?: string;
+  hash?: string;
+  updatedAt?: string;
+  json?: string;
+};
+
 export type ContactSection = {
   _type: "contactSection";
   title: string;
@@ -159,6 +205,7 @@ export type SiteSettings = {
     openMenu: string;
     closeMenu: string;
     getStarted: string;
+    languageMenu: string;
     organizations: {
       label: string;
       columns: {
@@ -297,6 +344,9 @@ export type SiteSettings = {
     instagram: string;
     tiktok: string;
   };
+  languages: Array<{
+    _key: string;
+  } & LanguageEntry>;
 };
 
 export type SanityImageCrop = {
@@ -432,7 +482,7 @@ export type Slug = {
   source?: string;
 };
 
-export type AllSanitySchemaTypes = FollowUp | Items | Form | ContactSection | BlogSection | ProductsSection | ValuesSection | HeroSection | ProductCard | NavItem | SanityImageAssetReference | ImageWithAlt | Post | SiteSettings | SanityImageCrop | SanityImageHotspot | HomePage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint | Slug;
+export type AllSanitySchemaTypes = FollowUp | Items | Form | LanguageEntry | TranslationStatus | Translation | ContactSection | BlogSection | ProductsSection | ValuesSection | HeroSection | ProductCard | NavItem | SanityImageAssetReference | ImageWithAlt | Post | SiteSettings | SanityImageCrop | SanityImageHotspot | HomePage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint | Slug;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
@@ -460,6 +510,7 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     openMenu: string;
     closeMenu: string;
     getStarted: string;
+    languageMenu: string;
     organizations: {
       label: string;
       columns: {
@@ -598,6 +649,9 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     instagram: string;
     tiktok: string;
   };
+  languages: Array<{
+    _key: string;
+  } & LanguageEntry>;
 } | null;
 
 // Source: ../habitat-rebuild-test/sanity/queries.ts
@@ -688,6 +742,18 @@ export type HOME_POSTS_QUERY_RESULT = Array<{
   url: string;
 }>;
 
+// Source: ../habitat-rebuild-test/sanity/queries.ts
+// Variable: SITE_LANGUAGES_QUERY
+// Query: *[_type == "siteSettings" && _id == "siteSettings-en"][0].languages
+export type SITE_LANGUAGES_QUERY_RESULT = Array<{
+  _key: string;
+} & LanguageEntry> | null;
+
+// Source: ../habitat-rebuild-test/sanity/queries.ts
+// Variable: TRANSLATION_JSON_QUERY
+// Query: *[_type == "translation" && _id == $id][0].json
+export type TRANSLATION_JSON_QUERY_RESULT = string | null;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -700,6 +766,8 @@ declare global {
     "*[_type == \"homePage\" && _id == \"homePage-en\"][0].blog": HOME_BLOG_QUERY_RESULT;
     "*[_type == \"homePage\" && _id == \"homePage-en\"][0].contact": HOME_CONTACT_QUERY_RESULT;
     "*[_type == \"post\" && defined(date) && defined(url) && defined(image.asset)] | order(date desc)[0...3]": HOME_POSTS_QUERY_RESULT;
+    "*[_type == \"siteSettings\" && _id == \"siteSettings-en\"][0].languages": SITE_LANGUAGES_QUERY_RESULT;
+    "*[_type == \"translation\" && _id == $id][0].json": TRANSLATION_JSON_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

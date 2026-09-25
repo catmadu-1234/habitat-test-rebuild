@@ -4,7 +4,7 @@ import Label from "@/components/ui/Label";
 import { getSiteSettings } from "@/sanity/lib/site";
 
 export default async function Footer() {
-  const settings = await getSiteSettings();
+  const settings = await getSiteSettings("en");
   const { footer } = settings;
   const links = stegaClean(settings.links);
   const { login, company, resources, more } = footer.columns;
