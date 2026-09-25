@@ -47,10 +47,12 @@ Environment for this app (`.env.local` locally, `.dev.vars` for `npm run cf:prev
 | `CROWDIN_WEBHOOK_SECRET`        | Shared secret sent by Crowdin in the `X-Webhook-Secret` header.                                                                                                                                                    |
 | `CROWDIN_MT_ENGINE_ID`          | Machine translation engine id (`node --env-file=.env.local scripts/crowdin-info.mjs` lists them).                                                                                                                  |
 | `CROWDIN_PRETRANSLATE_METHOD`   | Optional: `mt` (default), `tm` or `ai`.                                                                                                                                                                            |
+| `CROWDIN_AI_PROMPT_ID`          | Only needed when `CROWDIN_PRETRANSLATE_METHOD` is `ai`.                                                                                                                                                            |
+| `CROWDIN_API_BASE`              | Crowdin Enterprise API base URL (default `https://api.crowdin.com/api/v2`).                                                                                                                                        |
 | `SANITY_API_WRITE_TOKEN`        | Sanity **Editor** token; the sync writes translations and status with it.                                                                                                                                          |
 | `NEXT_PUBLIC_SITE_URL`          | Public origin, used for hreflang and the sitemap. Inlined at build time.                                                                                                                                           |
 
-Set the secrets on Cloudflare with `npx wrangler secret put SANITY_API_READ_TOKEN` and `npx wrangler secret put SANITY_REVALIDATE_SECRET`. Add each site origin to
+Set the secrets on Cloudflare with `npx wrangler secret put <NAME>` for `SANITY_API_READ_TOKEN`, `SANITY_REVALIDATE_SECRET`, `CROWDIN_API_TOKEN`, `CROWDIN_PROJECT_ID`, `CROWDIN_WEBHOOK_SECRET`, `CROWDIN_MT_ENGINE_ID` and `SANITY_API_WRITE_TOKEN` (plus the optional Crowdin variables if used). `NEXT_PUBLIC_SITE_URL` is inlined at build time, so set it in `.env.local` before building; it is not a secret. Add each site origin to
 Sanity CORS with credentials (`npx sanity cors add <origin> --credentials` in the Studio folder).
 
 ## Deploy to Vercel

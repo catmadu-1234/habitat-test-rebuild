@@ -38,7 +38,7 @@ must stay easy to edit in Onlook (layout and classes) and in Sanity (copy, image
 - New section = new file in `components/home/`, wrapped in `<Section>` (background + container + section
   padding) and opened with `<SectionHeader>` where it has a label + heading. Reuse `Button`, `Label`,
   `SectionLabel`, `PromoTile` before writing new markup.
-- Components are async server components that read Sanity with `fetchRequired(<QUERY>)` and `getLinks()`. Only add `"use client"` for real
+- Components are async server components that read Sanity with `fetchLocalized(<QUERY>, locale, sourceId, path)` (copy) and `getLinks()` (URLs). `fetchRequired` is only for content that is the same in every language (e.g. the `siteSettings-en.languages` rows read by `getLanguages`). Only add `"use client"` for real
   interactivity (see `BackgroundVideo`). The nav menu and dropdowns are CSS-only (checkbox + `group-has`/hover).
 - Outbound links live in `siteSettings-en.links` (a blog post's link is on its `post` document). Which link a
   menu entry uses stays in code; the URL itself is edited in Sanity.
