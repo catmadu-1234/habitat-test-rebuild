@@ -4,10 +4,14 @@ import { stegaClean } from "next-sanity";
 import { statusFor, type LanguageStatus } from "@/lib/languages";
 import { DEFAULT_LOCALE, getLocale, type LocaleConfig } from "@/lib/locales";
 import { SITE_LANGUAGES_QUERY } from "@/sanity/queries";
-import { fetchRequired } from "./fetch";
+import { SANITY_CACHE_TAG } from "./cache-tag";
+import { sanityFetch } from "./live";
 
 export const getLanguages = cache(async () => {
-  const rows = await fetchRequired(SITE_LANGUAGES_QUERY);
+  // Not fetchRequired: English must keep rendering when `languages` is missing. No rows means no
+  // switcher and 404s for every other locale.
+  const { data } = await sanityFetch({ query: SITE_LANGUAGES_QUERY, tags: [SANITY_CACHE_TAG] });
+  const rows = data ?? [];
   // Codes and statuses drive logic, so strip stega. Names are visible text and stay as they are.
   return rows.map((row) => ({
     ...row,
