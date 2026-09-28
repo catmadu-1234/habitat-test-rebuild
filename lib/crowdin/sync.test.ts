@@ -103,7 +103,7 @@ test("pushes every new document, pre-translates once for the active languages, s
     fileIds: number[];
     languageIds: string[];
   };
-  assert.deepEqual(pre.languageIds, ["ar", "es"]);
+  assert.deepEqual(pre.languageIds, ["ar", "es-ES"]);
   assert.equal(pre.fileIds.length, 2);
   assert.ok(names().indexOf("saveDocuments") > -1);
   assert.ok(names().indexOf("saveDocuments") < names().indexOf("preTranslate"));
@@ -159,7 +159,7 @@ test("stores complete languages, skips incomplete ones, revalidates once, marks 
     progress: {
       7: [
         { languageId: "ar", translationProgress: 100 },
-        { languageId: "es", translationProgress: 60 },
+        { languageId: "es-ES", translationProgress: 60 },
       ],
     },
   });
@@ -309,7 +309,7 @@ test("FIX: a language switched on later is pre-translated for unchanged files it
       stored: { [storeKey("ar", "homePage-en")]: hash },
     },
     docs: [{ id: "homePage-en", doc: home }],
-    progress: { 7: [{ languageId: "es", translationProgress: 10 }] },
+    progress: { 7: [{ languageId: "es-ES", translationProgress: 10 }] },
   });
   await runSync(deps);
   const pre = log.find((e) => e.name === "preTranslate")!.args as {
@@ -317,7 +317,7 @@ test("FIX: a language switched on later is pre-translated for unchanged files it
     languageIds: string[];
   };
   assert.deepEqual(pre.fileIds, [7]);
-  assert.deepEqual(pre.languageIds, ["ar", "es"]);
+  assert.deepEqual(pre.languageIds, ["ar", "es-ES"]);
   assert.ok(!log.some((e) => e.name === "upsertFile"));
 });
 
