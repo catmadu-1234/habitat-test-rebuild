@@ -20,10 +20,12 @@ test("English is the default and left-to-right; Arabic is the only right-to-left
 });
 
 test("maps the agreed regional variants", () => {
-  assert.equal(getLocale("pt-br")?.crowdinId, "pt-BR");
+  // Crowdin's project has European Portuguese (pt-PT), not Brazilian; see lib/locales.ts.
+  assert.equal(getLocale("pt-br")?.crowdinId, "pt-PT");
   assert.equal(getLocale("zh-cn")?.htmlLang, "zh-CN");
   assert.equal(getLocale("zh-tw")?.crowdinId, "zh-TW");
-  assert.equal(getLocale("nb")?.crowdinId, "nb");
+  // Crowdin's project uses plain Norwegian ("no"), not the "nb" bokmål-specific code.
+assert.equal(getLocale("nb")?.crowdinId, "no");
 });
 
 test("getLocale is exact: unknown, uppercase and empty codes are not locales", () => {
