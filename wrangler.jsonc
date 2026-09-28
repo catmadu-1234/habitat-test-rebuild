@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "habitat-test-rebuild",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  "images": {
+    "binding": "IMAGES",
+  },
+  "kv_namespaces": [
+    { "binding": "NEXT_INC_CACHE_KV", "id": "d9162ae570be49c1a25b12cd6a2c16a1" },
+    { "binding": "NEXT_TAG_CACHE_KV", "id": "f4139971342e422ab9abf6baef4ed0cb" },
+  ],
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "habitat-test-rebuild" }],
+}
