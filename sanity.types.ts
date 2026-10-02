@@ -51,17 +51,10 @@ export type TranslationStatus = {
   _updatedAt: string;
   _rev: string;
   requestedAt?: string;
-  running?: boolean;
-  runStartedAt?: string;
+  queuedCount?: number;
   lastSyncAt?: string;
   lastError?: string;
   pendingCount?: number;
-  documents?: Array<{
-    hash?: string;
-    fileId?: number;
-    _type: "syncedDocument";
-    _key: string;
-  }>;
   stored?: Array<{
     hash?: string;
     storedAt?: string;
@@ -236,6 +229,17 @@ export type SiteSettings = {
       promo: {
         label: string;
         image: ImageWithAlt;
+      };
+    };
+    solutions: {
+      label: string;
+      columnLabel: string;
+      items: {
+        higherEducation: string;
+        k12: string;
+        government: string;
+        enterprise: string;
+        personal: string;
       };
     };
     students: {
@@ -541,6 +545,17 @@ export type SITE_SETTINGS_QUERY_RESULT = {
       promo: {
         label: string;
         image: ImageWithAlt;
+      };
+    };
+    solutions: {
+      label: string;
+      columnLabel: string;
+      items: {
+        higherEducation: string;
+        k12: string;
+        government: string;
+        enterprise: string;
+        personal: string;
       };
     };
     students: {

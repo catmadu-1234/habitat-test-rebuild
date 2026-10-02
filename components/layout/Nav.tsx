@@ -63,6 +63,15 @@ export default async function Nav({ locale }: { locale: string }) {
     { key: "login", label: nav.students.items.login, href: links.messengerPigeonLogin },
   ];
 
+  // No pages yet, so these entries do not link anywhere.
+  const solutionItems = [
+    { key: "higherEducation", label: nav.solutions.items.higherEducation },
+    { key: "k12", label: nav.solutions.items.k12 },
+    { key: "government", label: nav.solutions.items.government },
+    { key: "enterprise", label: nav.solutions.items.enterprise },
+    { key: "personal", label: nav.solutions.items.personal },
+  ];
+
   const mobileItems = [
     { key: "messengerPigeon", ...nav.mobile.items.messengerPigeon, href: links.messengerPigeon },
     { key: "liveServices", ...nav.mobile.items.liveServices, href: links.liveServices },
@@ -147,6 +156,32 @@ export default async function Nav({ locale }: { locale: string }) {
                     >
                       <Button href={links.blog}>{nav.organizations.promo.label}</Button>
                     </PromoTile>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="dd group/dd">
+              <div
+                tabIndex={0}
+                className={`cursor-pointer ${navLink} group-hover/dd:border-paper/8 group-hover/dd:bg-brand-purple group-hover/dd:text-paper`}
+              >
+                {nav.solutions.label}
+              </div>
+              <div className={dropdownPanel}>
+                <div className="relative py-8">
+                  <div className="absolute inset-0 bg-paper" />
+                  <div className="relative mx-auto max-w-page px-8">
+                    <div className="flex flex-col items-start gap-8">
+                      <SectionLabel className="ms-[5px]">{nav.solutions.columnLabel}</SectionLabel>
+                      <div className="flex flex-col items-start gap-4">
+                        {solutionItems.map((item) => (
+                          <div key={item.key} className="text-brand-purple/88">
+                            {item.label}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
